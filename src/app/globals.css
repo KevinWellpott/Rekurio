@@ -105,7 +105,7 @@
  *   .glass-subtle         → feste Tailwind-Werte (optional auf Token umstellen)
  *   .container             → --container-max-width, --container-padding
  *   .section-spacing       → --section-spacing-y (padding-top/bottom)
- *   body::before           → Glasmorph vollpage (--page-glass-*)
+ *   body::before / ::after → Bild+Overlay (::before), Glasmorph (::after, --page-glass-*)
  *
  * -----------------------------------------------------------------------------
  * SCHNELLREFERENZ: „Was stelle ich wo ein?“
@@ -116,7 +116,7 @@
  *   Marken- / UI-Farben       → :root --brand, --primary, --background, …
  *   Body-Fließtext            → :root --text-base, --leading-*
  *   Seiten-Hintergrund-Bild   → public-Datei + :root --page-bg-image, --page-bg-overlay
- *   Vollpage-Glas             → :root --page-glass-tint, --page-glass-blur
+ *   Vollpage-Glas             → :root --page-glass-* auf body::after (blur über body::before)
  *   Ecken global              → :root --radius
  *   Glass-Karten              → :root --surface-glass-* + Klassen .glass*
  *
@@ -380,26 +380,40 @@
     @apply border-border outline-ring/50;
   }
 
+  /**
+   * Hintergrund + Glass in zwei Pseudo-Ebenen (nicht: Bild auf body + ::before blur).
+   * Sonst kann backdrop-filter in Production/Chrome die body-background nicht zuverlässig
+   * als „Backdrop“ samplen (Compositing). Glass liegt auf ::after und blur’t ::before.
+   * background-attachment: fixed auf body entfällt — vermeidet bekannte Safari/Chrome-Bugs
+   * mit backdrop-filter.
+   */
   body {
     font-family: var(--font-sans);
     font-size: var(--text-base);
     line-height: var(--leading-normal);
-    isolation: isolate;
     position: relative;
     @apply min-h-screen text-foreground antialiased;
     background-color: var(--background);
-    /* Ebene 1: Bild + Abdunkelung (fixiert) */
+  }
+
+  /* Ebene 0: Vollflächiges Bild + Overlay (eigenes Layer unter dem Blur) */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
     background-image:
       linear-gradient(var(--page-bg-overlay), var(--page-bg-overlay)),
       var(--page-bg-image);
     background-size: cover, cover;
     background-position: center, center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    /* fixed entfernt: Layer ist schon position:fixed, Anhang „fixed“ triggert oft Backdrop-Bugs */
   }
 
-  /* Eine durchgehende Glass-Ebene — blur über dem ganzen Viewport, keine Kästen pro Section */
-  body::before {
+  /* Ebene 1: Tönung + Blur über der Bildebene */
+  body::after {
     content: "";
     position: fixed;
     inset: 0;
@@ -408,6 +422,8 @@
     background: var(--page-glass-tint);
     backdrop-filter: blur(var(--page-glass-blur));
     -webkit-backdrop-filter: blur(var(--page-glass-blur));
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   /* App-Inhalt über der Glass-Ebene */
