@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Calendar, ChevronRight, Lock } from "lucide-react"
 import { motion } from "motion/react"
+import posthog from "posthog-js"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
@@ -31,10 +32,16 @@ function WaitlistForm() {
     setFieldError(false)
     setStatus("loading")
 
+    posthog.capture("preorder_hero_signup_submitted", { email: trimmed })
+
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-POSTHOG-DISTINCT-ID": posthog.get_distinct_id(),
+          "X-POSTHOG-SESSION-ID": posthog.get_session_id() ?? "",
+        },
         body: JSON.stringify({ email: trimmed }),
       })
       const data = (await res.json()) as { ok?: boolean; error?: string }
@@ -43,10 +50,13 @@ function WaitlistForm() {
         setMessage(data.error || "Das hat nicht geklappt. Bitte später erneut.")
         return
       }
+      posthog.capture("preorder_hero_signup_succeeded", { email: trimmed })
+      posthog.identify(trimmed, { email: trimmed })
       setStatus("success")
       setMessage("Du bist dabei. Wir melden uns, bevor alle gehen.")
       setEmail("")
-    } catch {
+    } catch (err) {
+      posthog.captureException(err)
       setStatus("error")
       setMessage("Netzwerkfehler. Bitte später erneut.")
     }
@@ -210,6 +220,7 @@ export function PreorderHero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-foreground/80 group inline-flex items-center gap-1 font-medium underline-offset-4 hover:underline"
+                onClick={() => posthog.capture("preorder_hero_call_clicked")}
               >
                 Kostenlosen Call buchen
                 <ChevronRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />

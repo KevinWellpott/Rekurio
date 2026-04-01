@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getPostHogClient } from "@/lib/posthog-server"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -103,6 +104,9 @@ async function subscribePipedrive(email: string) {
 }
 
 export async function POST(request: Request) {
+  const distinctId = request.headers.get("X-POSTHOG-DISTINCT-ID") ?? "anonymous"
+  const sessionId = request.headers.get("X-POSTHOG-SESSION-ID") ?? undefined
+
   let body: unknown
   try {
     body = await request.json()
@@ -127,19 +131,44 @@ export async function POST(request: Request) {
   try {
     if (provider === "none") {
       console.info("[subscribe] CRM_PROVIDER=none — E-Mail nur geloggt:", email)
+      const posthog = getPostHogClient()
+      posthog.capture({
+        distinctId,
+        event: "subscribe_api_succeeded",
+        properties: { email, provider: "none", $session_id: sessionId },
+      })
       return NextResponse.json({ ok: true, mode: "none" })
     }
 
     if (provider === "pipedrive") {
       await subscribePipedrive(email)
+      const posthog = getPostHogClient()
+      posthog.capture({
+        distinctId,
+        event: "subscribe_api_succeeded",
+        properties: { email, provider: "pipedrive", $session_id: sessionId },
+      })
       return NextResponse.json({ ok: true, provider: "pipedrive" })
     }
 
     await subscribeKlaviyo(email)
+    const posthog = getPostHogClient()
+    posthog.capture({
+      distinctId,
+      event: "subscribe_api_succeeded",
+      properties: { email, provider: "klaviyo", $session_id: sessionId },
+    })
+    posthog.identify({ distinctId, properties: { email } })
     return NextResponse.json({ ok: true, provider: "klaviyo" })
   } catch (e) {
     console.error("[subscribe]", e)
     const message = e instanceof Error ? e.message : "CRM-Anbindung fehlgeschlagen"
+    const posthog = getPostHogClient()
+    posthog.capture({
+      distinctId,
+      event: "subscribe_api_failed",
+      properties: { email, provider, error: message, $session_id: sessionId },
+    })
     return NextResponse.json({ error: message }, { status: 502 })
   }
 }

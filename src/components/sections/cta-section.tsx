@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Calendar, ChevronRight, CreditCard, Unplug, X } from "lucide-react"
 import { motion } from "motion/react"
+import posthog from "posthog-js"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -43,10 +44,16 @@ export function CtaSection() {
     setStatus("loading")
     setMessage("")
 
+    posthog.capture("cta_waitlist_signup_submitted", { email: trimmed })
+
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-POSTHOG-DISTINCT-ID": posthog.get_distinct_id(),
+          "X-POSTHOG-SESSION-ID": posthog.get_session_id() ?? "",
+        },
         body: JSON.stringify({ email: trimmed }),
       })
       const data = (await res.json()) as { ok?: boolean; error?: string }
@@ -57,10 +64,13 @@ export function CtaSection() {
         return
       }
 
+      posthog.capture("cta_waitlist_signup_succeeded", { email: trimmed })
+      posthog.identify(trimmed, { email: trimmed })
       setStatus("success")
       setMessage("Danke – wir melden uns zum Launch.")
       setEmail("")
-    } catch {
+    } catch (err) {
+      posthog.captureException(err)
       setStatus("error")
       setMessage("Netzwerkfehler. Bitte später erneut.")
     }
@@ -138,7 +148,7 @@ export function CtaSection() {
                   size="lg"
                   className="group w-full shadow-sm sm:w-auto"
                 >
-                  <a href={calendlyUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("cta_call_booking_clicked")}>
                     <Calendar className="size-4" />
                     Call buchen
                     <ChevronRight className="size-4 translate-x-0 transition-transform duration-300 ease-out group-hover:translate-x-0.5" />

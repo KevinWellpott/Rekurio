@@ -2,6 +2,7 @@
 
 import { Check } from "lucide-react"
 import { motion } from "motion/react"
+import posthog from "posthog-js"
 
 import { BorderBeam } from "@/components/ui/border-beam"
 import { MagicCard } from "@/components/ui/magic-card"
@@ -152,7 +153,7 @@ export function PricingSection() {
                         !tier.featured && "border-white/20 bg-white/5 text-foreground hover:bg-white/10"
                       )}
                     >
-                      <a href="#">{tier.cta}</a>
+                      <a href="#" onClick={() => posthog.capture("pricing_plan_cta_clicked", { plan: tier.name, featured: tier.featured })}>{tier.cta}</a>
                     </Button>
                   </div>
                 </div>

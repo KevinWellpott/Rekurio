@@ -316,8 +316,8 @@
   --page-bg-overlay: oklch(0.08 0.02 260 / 0.55);
 
   /* --- Vollpage-Glass (eine Ebene über dem Hintergrundbild, keine Sektions-Ränder) --- */
-  --page-glass-tint: oklch(0.12 0.02 260 / 0.18);
-  --page-glass-blur: 22px;
+  --page-glass-tint: oklch(0.12 0.02 160 / 0.18);
+  --page-glass-blur: 12px;
 
   /* --- Marken- & UI-Farben (shadcn / Theme) --- */
   --brand: #d1fe49;
