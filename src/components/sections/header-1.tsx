@@ -42,16 +42,24 @@ export function StickyHeader() {
   return (
     <header ref={stickyNavRef} className="sticky top-0 z-50 px-10 py-7 xl:px-0">
       <nav className="relative mx-auto flex max-w-2xl items-center justify-between">
-        <motion.img
-          className="h-10 w-10"
-          src="/android-chrome-512x512.png"
-          alt="MagicUI Logo"
-          animate={{
-            y: scrollY >= 120 ? -50 : 0,
-            opacity: scrollY >= 120 ? 0 : 1,
-          }}
-          transition={{ duration: 0.15 }}
-        />
+        <Link
+          href="/"
+          className="relative block h-12 w-auto shrink-0 md:h-14"
+          aria-label="Rekurio – zur Startseite"
+        >
+          <motion.img
+            className="h-full w-auto max-h-14 object-contain object-left"
+            src="/logo.svg"
+            alt=""
+            width={180}
+            height={48}
+            animate={{
+              y: scrollY >= 120 ? -50 : 0,
+              opacity: scrollY >= 120 ? 0 : 1,
+            }}
+            transition={{ duration: 0.15 }}
+          />
+        </Link>
 
         <ul className="sticky top-4 right-4 left-4 z-[60] hidden items-center justify-center gap-x-5 md:flex">
           <motion.div

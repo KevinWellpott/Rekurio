@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn, constructMetadata } from "@/lib/utils";
@@ -38,6 +39,7 @@ export default function RootLayout({
           defaultTheme="dark"
         >
           {children}
+          <Footer />
           <TailwindIndicator />
         </ThemeProvider>
       </body>

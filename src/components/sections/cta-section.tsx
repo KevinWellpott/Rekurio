@@ -84,8 +84,8 @@ export function CtaSection() {
               Bereit, Klaviyo voll auszureizen?
             </h2>
             <p className="text-muted-foreground text-left text-base text-balance">
-              Trag dich ein und sicher dir deinen frühen Zugang – oder buch direkt einen
-              kurzen Call, damit wir verstehen, wie wir dir helfen können.
+              Starte jetzt direkt oder buch einen kurzen Call – wir zeigen dir, wie Rekurio
+              deinen konkreten Klaviyo-Setup sofort besser macht.
             </p>
           </div>
 
@@ -104,7 +104,7 @@ export function CtaSection() {
                     type="email"
                     autoComplete="email"
                     inputMode="email"
-                    placeholder="E-Mail für frühen Zugang"
+                    placeholder="E-Mail für deinen Zugang"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value)
@@ -152,7 +152,7 @@ export function CtaSection() {
                   disabled={status === "loading"}
                   className="w-full border-white/30 bg-white text-neutral-950 shadow-sm hover:bg-white/95 sm:w-auto"
                 >
-                  {status === "loading" ? "Senden…" : "Frühen Zugang sichern"}
+                  {status === "loading" ? "Senden…" : "Zugang sichern"}
                   <ChevronRight className="size-4" />
                 </Button>
               </div>

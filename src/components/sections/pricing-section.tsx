@@ -168,7 +168,7 @@ export function PricingSection() {
           viewport={viewportOnce}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          Alle Pläne monatlich kündbar · Keine Kreditkarte für die Waitlist · Preise exkl. MwSt.
+          Alle Pläne monatlich kündbar · Keine Kreditkarte nötig · Preise exkl. MwSt.
         </motion.p>
       </div>
     </section>

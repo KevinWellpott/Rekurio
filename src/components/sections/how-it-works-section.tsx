@@ -9,9 +9,9 @@ const steps = [
   {
     number: "01",
     icon: ListTodo,
-    title: "Waitlist",
+    title: "Kostenlos starten",
     description:
-      "Früh dabei sein und Zugang sichern. Wir onboarden schrittweise – du bist einer der Ersten.",
+      "Konto erstellen, Klaviyo verbinden – in wenigen Minuten. Keine IT, keine Agentur.",
   },
   {
     number: "02",

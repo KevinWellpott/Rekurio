@@ -167,7 +167,7 @@ function HeroLaunchForm({ calendlyUrl }: { calendlyUrl: string }) {
               type="email"
               autoComplete="email"
               inputMode="email"
-              placeholder="E-Mail für Infos bis zum Launch"
+              placeholder="E-Mail für deinen Zugang"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value)
@@ -219,7 +219,7 @@ function HeroLaunchForm({ calendlyUrl }: { calendlyUrl: string }) {
             disabled={status === "loading"}
             className="w-full border-white/30 bg-white text-neutral-950 shadow-sm hover:bg-white/95 sm:w-auto"
           >
-            {status === "loading" ? "Senden…" : "Updates sichern"}
+            {status === "loading" ? "Senden…" : "Zugang sichern"}
             <ChevronRight className="size-4" />
           </Button>
         </div>
