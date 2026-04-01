@@ -1,0 +1,10 @@
+---
+description: Git-Branches – tägliche Arbeit auf develop, keine direkten Commits auf main ohne explizite Anweisung
+alwaysApply: true
+---
+
+# Git-Workflow Rekurio
+
+- **Standard-Branch für Entwicklung:** `develop`. Neue Features und Fixes bitte als Branch von `develop` ablegen (z. B. `feature/kurzbeschreibung`, `fix/…`).
+- **`main`:** nur für Releases oder nach expliziter Nutzeranweisung; nicht direkt auf `main` committen oder pushen, wenn der Nutzer „auf Branches arbeiten“ will.
+- **Ablauf:** Änderungen auf Feature-Branch → Pull Request nach `develop` → bei Release nach `main` mergen (oder wie im Team vereinbart).
