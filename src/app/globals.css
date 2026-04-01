@@ -1,0 +1,481 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@import "tw-animate-css";
+
+/*
+ * =============================================================================
+ * globals.css — DOKUMENTATION (Rekurio)
+ * =============================================================================
+ *
+ * AUFGABE DIESER DATEI
+ *   Zentrale Design-Tokens (Farben, Abstände, Typo, Layout) und globale Styles.
+ *   Tailwind v4 wird oben importiert; @theme verbindet Token-Namen mit :root.
+ *
+ * -----------------------------------------------------------------------------
+ * 1) IMPORTS (Zeilen direkt unter diesem Block)
+ * -----------------------------------------------------------------------------
+ *   tailwindcss          → Utilities (flex, p-4, bg-primary, …)
+ *   @tailwindcss/typography → .prose & Co.
+ *   tw-animate-css       → zusätzliche Animationen
+ *   Hier normalerweise nichts ändern, außer du fügst bewusst Plugins hinzu.
+ *
+ * -----------------------------------------------------------------------------
+ * 2) @custom-variant dark
+ * -----------------------------------------------------------------------------
+ *   Ermöglicht Klassen wie dark:bg-… wenn <html class="dark"> gesetzt ist.
+ *   Keine Farbwerte hier eintragen.
+ *
+ * -----------------------------------------------------------------------------
+ * 3) @theme inline { … }
+ * -----------------------------------------------------------------------------
+ *   Tailwind-Theme: mappt Namen auf var(--…) aus :root.
+ *
+ *   --radius-sm … --radius-xl
+ *      Ableitung von --radius in :root. Grundwert: :root --radius.
+ *
+ *   --color-*
+ *      Zeigen auf --brand, --background, --primary, … in :root.
+ *      Echte Farbwerte NUR in :root ändern, nicht hier duplizieren.
+ *
+ *   --animate-* und @keyframes
+ *      Animationen (Marquee, Border-Beam, …). Nur anfassen, wenn du
+ *      Bewegungsabläufe oder Zeiten (z. B. 0.2s) anpassen willst.
+ *
+ * -----------------------------------------------------------------------------
+ * 4) :root { … }
+ * -----------------------------------------------------------------------------
+ *   Hauptort für Einstellungen:
+ *
+ *   --bp-sm … --bp-xl
+ *      Referenz-Breakpoints (rem). Die @media-Blöcke unten nutzen feste Werte
+ *      (48rem, 64rem) — bei Änderung hier und in @media konsistent bleiben.
+ *
+ *   --space-1 … --space-16
+ *      Eigene Abstandsskala für var() in eigenem CSS / calc().
+ *      Tailwind-Klassen wie p-4 nutzen das NICHT automatisch.
+ *
+ *   --section-spacing-y
+ *      Vertikales Padding für .section-spacing (Hero, Features, …).
+ *      Oft clamp(min, vw, max) — min darf nie größer als max sein.
+ *
+ *   --container-padding
+ *      Horizontaler Innenrand der Klasse .container.
+ *
+ *   --container-max-width
+ *      Maximale Breite des .container.
+ *
+ *   --text-xs … --text-4xl, --leading-*, --font-sans
+ *      Fluid-Typo; body nutzt --text-base und --leading-normal.
+ *      Klassen wie text-xl in JSX sind Tailwinds Skala — nur bei Nutzung von
+ *      var(--text-…) oder text-[length:var(--text-xl)] greifen diese Tokens.
+ *
+ *   --radius
+ *      Basis für abgerundete Ecken (--radius-sm etc. in @theme).
+ *
+ *   --surface-glass-*
+ *      Für .glass / .glass-strong in @layer utilities.
+ *
+ *   --page-bg-image, --page-bg-overlay
+ *      Vollpage-Hintergrund (public/…), darüber Abdunkelung. body nutzt beides.
+ *
+ *   --page-glass-tint, --page-glass-blur
+ *      Vollpage-Glas (body::before), ein Layer über dem Hintergrundbild.
+ *
+ *   --brand, --background, --foreground, --primary, --secondary, --muted,
+ *   --destructive, --border, --input, --ring, --chart-*, --sidebar-*
+ *      Theme-Farben (shadcn). Tailwind: bg-background, text-primary, …
+ *
+ * -----------------------------------------------------------------------------
+ * 5) @media (min-width: …) { :root { … } }
+ * -----------------------------------------------------------------------------
+ *   Überschreibt dieselben Variablennamen ab größerem Viewport
+ *   (z. B. mehr --section-spacing-y / --container-padding auf Desktop).
+ *
+ * -----------------------------------------------------------------------------
+ * 6) @layer base
+ * -----------------------------------------------------------------------------
+ *   *     → globale border/outline-Defaults.
+ *   body  → font-family, font-size, line-height, Hintergrundbild + Overlay
+ *           (--page-bg-*). Nur bei Bedarf anpassen.
+ *
+ * -----------------------------------------------------------------------------
+ * 7) @layer utilities
+ * -----------------------------------------------------------------------------
+ *   .glass, .glass-strong  → nutzen --surface-glass-*
+ *   .glass-subtle         → feste Tailwind-Werte (optional auf Token umstellen)
+ *   .container             → --container-max-width, --container-padding
+ *   .section-spacing       → --section-spacing-y (padding-top/bottom)
+ *   body::before           → Glasmorph vollpage (--page-glass-*)
+ *
+ * -----------------------------------------------------------------------------
+ * SCHNELLREFERENZ: „Was stelle ich wo ein?“
+ * -----------------------------------------------------------------------------
+ *   Sektions-Abstand          → :root --section-spacing-y (+ ggf. @media)
+ *   Rand links/rechts Content → :root --container-padding (+ ggf. @media)
+ *   Max. Content-Breite       → :root --container-max-width
+ *   Marken- / UI-Farben       → :root --brand, --primary, --background, …
+ *   Body-Fließtext            → :root --text-base, --leading-*
+ *   Seiten-Hintergrund-Bild   → public-Datei + :root --page-bg-image, --page-bg-overlay
+ *   Vollpage-Glas             → :root --page-glass-tint, --page-glass-blur
+ *   Ecken global              → :root --radius
+ *   Glass-Karten              → :root --surface-glass-* + Klassen .glass*
+ *
+ *   Zwischen zwei Sektionen mit .section-spacing addieren sich optisch
+ *   unteres Padding der ersten und oberes der zweiten (≈ 2× Abstand).
+ *
+ * =============================================================================
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+/* Tailwind-Theme: leitet bg-*, rounded-*, Animationen von :root ab (siehe Kopf) */
+
+@theme inline {
+  /* Border Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Colors */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Animations */
+  --animate-marquee: marquee var(--duration) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-border-beam: border-beam calc(var(--duration) * 1s) infinite linear;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-ripple: ripple var(--duration, 2s) ease calc(var(--i, 0) * 0.2s) infinite;
+
+  /* Keyframes */
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes border-beam {
+    100% {
+      offset-distance: 100%;
+    }
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes ripple {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+  }
+
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+  @keyframes shimmer-slide {
+    to {
+      transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+    0% {
+      transform: translateZ(0) rotate(0);
+    }
+    15%,
+    35% {
+      transform: translateZ(0) rotate(90deg);
+    }
+    65%,
+    85% {
+      transform: translateZ(0) rotate(270deg);
+    }
+    100% {
+      transform: translateZ(0) rotate(360deg);
+    }
+  }
+}
+
+/* :root — Design-Tokens (Details siehe Dokumentationsblock am Dateianfang) */
+
+:root {
+  /* --- Breakpoints (Referenz; in Media Queries fest codiert) --- */
+  --bp-sm: 40rem; /* 640px */
+  --bp-md: 48rem; /* 768px */
+  --bp-lg: 64rem; /* 1024px */
+  --bp-xl: 80rem; /* 1280px */
+
+  /* --- Abstandsskala (einheitlich für Margin/Padding/Gaps in eigenem CSS) --- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* --- Layout (Marketing) — fluid = konsistent auf allen Viewports --- */
+  /* Demo: 4× Basis — zurück: alle drei clamp-Zeilen halbieren (2×) bzw. auf Ausgang */
+  --section-spacing-y: clamp(4rem, 14vw, 7rem);
+  --container-padding: clamp(1rem, 4vw, 1.5rem);
+  --container-max-width: 1200px;
+
+  /* --- Typografie (fluid; Body nutzt --text-base) --- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --text-xs: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+  --text-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
+  --text-base: clamp(0.9375rem, 0.9rem + 0.2vw, 1rem);
+  --text-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-xl: clamp(1.125rem, 1rem + 0.4vw, 1.25rem);
+  --text-2xl: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
+  --text-3xl: clamp(1.5rem, 1.2rem + 1.2vw, 1.875rem);
+  --text-4xl: clamp(1.875rem, 1.35rem + 2vw, 2.25rem);
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  /* --- Radius --- */
+  --radius: 0.625rem;
+
+  /* --- Flächen / Effekte (Glass – eine feste Optik überall) --- */
+  --surface-glass-border: oklch(1 0 0 / 10%);
+  --surface-glass-bg: oklch(1 0 0 / 6%);
+  --surface-glass-bg-strong: oklch(1 0 0 / 10%);
+  /** Einheitlicher Blur für alle .glass / .glass-inner / .glass-strong */
+  --surface-glass-blur: 16px;
+  /** Trennlinie zwischen Marketing-Sections (volle Breite) */
+  --section-divider: oklch(1 0 0 / 12%);
+
+  /* --- Seiten-Hintergrund: Bild + Abdunkelung (liegt hinter Glass-Sektionen) --- */
+  --page-bg-image: url("/site-background.png");
+  --page-bg-overlay: oklch(0.08 0.02 260 / 0.55);
+
+  /* --- Vollpage-Glass (eine Ebene über dem Hintergrundbild, keine Sektions-Ränder) --- */
+  --page-glass-tint: oklch(0.12 0.02 260 / 0.18);
+  --page-glass-blur: 22px;
+
+  /* --- Marken- & UI-Farben (shadcn / Theme) --- */
+  --brand: #d1fe49;
+  --brand-foreground: oklch(0.16 0.02 125);
+
+  --background: oklch(0.12 0.01 260);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.18 0.02 260);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.16 0.02 260 / 0.92);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+  --secondary: oklch(0.22 0.02 260);
+  --secondary-foreground: oklch(0.88 0.17 125);
+  --muted: oklch(0.22 0.02 260);
+  --muted-foreground: oklch(0.65 0.02 260);
+  --accent: oklch(0.24 0.03 260);
+  --accent-foreground: oklch(0.88 0.17 125);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.72 0.16 125);
+
+  --chart-1: oklch(0.88 0.19 125);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  --sidebar: oklch(0.16 0.02 260);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: oklch(0.24 0.02 260);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.72 0.16 125);
+}
+
+/* Responsive Überschreibungen (gleiche Variablen wie in :root) */
+
+@media (min-width: 48rem) {
+  :root {
+    --section-spacing-y: clamp(5rem, 12vw, 8rem);
+    --container-padding: 1.25rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --section-spacing-y: clamp(6rem, 10vw, 9rem);
+    --container-padding: 1.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    isolation: isolate;
+    position: relative;
+    @apply min-h-screen text-foreground antialiased;
+    background-color: var(--background);
+    /* Ebene 1: Bild + Abdunkelung (fixiert) */
+    background-image:
+      linear-gradient(var(--page-bg-overlay), var(--page-bg-overlay)),
+      var(--page-bg-image);
+    background-size: cover, cover;
+    background-position: center, center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  /* Eine durchgehende Glass-Ebene — blur über dem ganzen Viewport, keine Kästen pro Section */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: var(--page-glass-tint);
+    backdrop-filter: blur(var(--page-glass-blur));
+    -webkit-backdrop-filter: blur(var(--page-glass-blur));
+  }
+
+  /* App-Inhalt über der Glass-Ebene */
+  body > * {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+@layer utilities {
+  /**
+   * Glasmorph – immer gleiche Werte (Rand, Fill, Blur).
+   * Keine zusätzlichen ring-* / andere blur-* auf Karten legen.
+   */
+  .glass {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--surface-glass-border);
+    background-color: var(--surface-glass-bg);
+    box-shadow: none;
+    backdrop-filter: blur(var(--surface-glass-blur));
+    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+  }
+
+  /** Nur Fill + Blur (z. B. innerhalb Magic Card, ohne zweiten Rand) */
+  .glass-inner {
+    background-color: var(--surface-glass-bg);
+    backdrop-filter: blur(var(--surface-glass-blur));
+    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+  }
+
+  .glass-strong {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--surface-glass-border);
+    background-color: var(--surface-glass-bg-strong);
+    box-shadow: none;
+    backdrop-filter: blur(var(--surface-glass-blur));
+    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+  }
+
+  /** @deprecated Name – identisch zu .glass (Legacy-Komponenten) */
+  .glass-subtle {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--surface-glass-border);
+    background-color: var(--surface-glass-bg);
+    box-shadow: none;
+    backdrop-filter: blur(var(--surface-glass-blur));
+    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+  }
+
+  /** Dünne Linie unter einer Section (volle Viewport-Breite des Blocks) */
+  .section-divider-b {
+    border-bottom: 1px solid var(--section-divider);
+  }
+
+  .container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+
+  .section-spacing {
+    padding-top: var(--section-spacing-y);
+    padding-bottom: var(--section-spacing-y);
+  }
+}
