@@ -42,7 +42,7 @@ export function Hero() {
                 type: "spring",
               }}
             >
-              Rekurio · DTC Retention
+              Rekurio · Klaviyo-Assistent für DTC-Brands
             </motion.p>
 
             <motion.h1
@@ -57,7 +57,7 @@ export function Hero() {
                 type: "spring",
               }}
             >
-              Hol mehr aus deinem <br /> Klaviyo raus.
+              Mehr Revenue aus Klaviyo. <br /> Ohne Agentur.
             </motion.h1>
 
             <motion.p
@@ -72,8 +72,8 @@ export function Hero() {
                 type: "spring",
               }}
             >
-              Rekurio zeigt dir täglich, was du als Nächstes tun solltest –
-              und setzt es um.
+              Du nutzt 20 % deines Klaviyo-Potenzials. Rekurio holt den Rest raus –
+              mit konkreten Schritten, messbarem Revenue, ohne Agentur-Overhead.
             </motion.p>
           </div>
 
@@ -142,7 +142,7 @@ function HeroLaunchForm({ calendlyUrl }: { calendlyUrl: string }) {
       posthog.capture("hero_waitlist_signup_succeeded", { email: trimmed })
       posthog.identify(trimmed, { email: trimmed })
       setStatus("success")
-      setMessage("Danke — wir melden uns zum Launch.")
+      setMessage("Danke — check deine Inbox für den Bestätigungslink.")
       setEmail("")
     } catch (err) {
       posthog.captureException(err)
@@ -177,7 +177,7 @@ function HeroLaunchForm({ calendlyUrl }: { calendlyUrl: string }) {
               type="email"
               autoComplete="email"
               inputMode="email"
-              placeholder="E-Mail für deinen Zugang"
+              placeholder="deine@email.com"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value)
@@ -218,7 +218,7 @@ function HeroLaunchForm({ calendlyUrl }: { calendlyUrl: string }) {
               onClick={() => posthog.capture("hero_call_booking_clicked")}
             >
               <Calendar className="size-4" />
-              Call buchen
+              Demo buchen
               <ChevronRight className="size-4 translate-x-0 transition-transform duration-300 ease-out group-hover:translate-x-0.5" />
             </a>
           </Button>
@@ -230,7 +230,7 @@ function HeroLaunchForm({ calendlyUrl }: { calendlyUrl: string }) {
             disabled={status === "loading"}
             className="w-full border-white/30 bg-white text-neutral-950 shadow-sm hover:bg-white/95 sm:w-auto"
           >
-            {status === "loading" ? "Senden…" : "Zugang sichern"}
+            {status === "loading" ? "Senden…" : "Kostenlos starten"}
             <ChevronRight className="size-4" />
           </Button>
         </div>

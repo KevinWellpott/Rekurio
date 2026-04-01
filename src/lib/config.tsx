@@ -8,9 +8,21 @@ export const BLUR_FADE_DELAY = 0.15;
 export const siteConfig = {
   name: "Rekurio",
   description:
-    "Der smarte Klaviyo-Assistent für DTC-Brands: Dashboard, Flows und Next-Best-Actions.",
+    "Mehr Revenue aus Klaviyo – ohne Agentur. Rekurio ist der Klaviyo-Assistent für DTC-Brands: Dashboard, Flows, KI-Copywriting und Next-Best-Actions. 14 Tage kostenlos.",
   url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-  keywords: ["Klaviyo", "DTC", "Email Marketing", "Marketing Automation", "Rekurio"],
+  keywords: [
+    "Klaviyo optimieren",
+    "Klaviyo Assistent",
+    "Klaviyo Dashboard",
+    "Klaviyo Flows",
+    "Email Marketing DTC",
+    "DTC Email Marketing Tool",
+    "Klaviyo Agentur Alternative",
+    "Retention Marketing Software",
+    "Klaviyo Win-Back Flow",
+    "Email Automation DTC Brand",
+    "Rekurio",
+  ],
   links: {
     email: "hello@rekurio.com",
     twitter: "https://twitter.com/magicuidesign",

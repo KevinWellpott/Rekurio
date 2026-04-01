@@ -43,7 +43,7 @@ export function constructMetadata({
         },
       ],
       type: "website",
-      locale: "en_US",
+      locale: "de_DE",
     },
     icons: "/favicon.ico",
     metadataBase: new URL(siteConfig.url),

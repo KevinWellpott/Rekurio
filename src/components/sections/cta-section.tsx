@@ -91,11 +91,11 @@ export function CtaSection() {
               Jetzt starten
             </span>
             <h2 className="from-foreground to-foreground/60 bg-linear-to-br from-30% bg-clip-text text-left text-3xl font-semibold tracking-tighter text-balance text-transparent sm:text-4xl">
-              Bereit, Klaviyo voll auszureizen?
+              14 Tage kostenlos. Kein Risiko.
             </h2>
             <p className="text-muted-foreground text-left text-base text-balance">
-              Starte jetzt direkt oder buch einen kurzen Call – wir zeigen dir, wie Rekurio
-              deinen konkreten Klaviyo-Setup sofort besser macht.
+              Verbinde Klaviyo in 2 Minuten, sieh deine KPIs sofort – und lass Rekurio
+              dir sagen, welcher Flow als nächstes den meisten Umsatz bringt.
             </p>
           </div>
 
@@ -114,7 +114,7 @@ export function CtaSection() {
                     type="email"
                     autoComplete="email"
                     inputMode="email"
-                    placeholder="E-Mail für deinen Zugang"
+                    placeholder="deine@email.com"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value)
@@ -162,7 +162,7 @@ export function CtaSection() {
                   disabled={status === "loading"}
                   className="w-full border-white/30 bg-white text-neutral-950 shadow-sm hover:bg-white/95 sm:w-auto"
                 >
-                  {status === "loading" ? "Senden…" : "Zugang sichern"}
+                  {status === "loading" ? "Senden…" : "Kostenlos starten"}
                   <ChevronRight className="size-4" />
                 </Button>
               </div>

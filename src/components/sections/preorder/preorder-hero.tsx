@@ -179,7 +179,7 @@ export function PreorderHero() {
               viewport={viewportOnce}
               transition={{ duration: 0.65, delay: 0.1, type: "spring", ease: [0.21, 0.47, 0.32, 0.98] }}
             >
-              Du lässt täglich Umsatz liegen. Rekurio holt ihn zurück.
+              Du zahlst für Klaviyo. Aber nutzt 20&nbsp;% davon.
             </motion.h1>
 
             <motion.p
@@ -189,8 +189,9 @@ export function PreorderHero() {
               viewport={viewportOnce}
               transition={{ duration: 0.6, delay: 0.18, type: "spring", ease: [0.21, 0.47, 0.32, 0.98] }}
             >
-              Sichere dir jetzt deinen Early-Access-Platz – mit Frühbucherpreis
-              und persönlichem Onboarding, bevor wir offiziell starten.
+              Rekurio holt den Rest raus. Trag dich ein und sichere dir den
+              Frühbucherpreis – dauerhaft 20&nbsp;% günstiger als der reguläre Preis,
+              plus persönliches Onboarding beim Launch.
             </motion.p>
           </div>
 

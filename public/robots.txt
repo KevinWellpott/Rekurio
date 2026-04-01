@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+Disallow: /preorder
+Disallow: /api/
+Disallow: /login
+Disallow: /signup
+Disallow: /impressum
+Disallow: /datenschutz
+Disallow: /agb
+
+Sitemap: https://www.rekurio.com/sitemap.xml

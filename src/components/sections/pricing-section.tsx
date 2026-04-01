@@ -11,52 +11,58 @@ import { cn } from "@/lib/utils"
 
 const viewportOnce = { once: true as const, amount: 0.15 }
 
-// TODO: Preise eintragen – aktuell Platzhalter
 const tiers = [
   {
-    name: "Starter",
-    price: "??",
+    name: "Core",
+    price: "89",
     period: "/ Monat",
-    description: "Für DTC-Brands, die Klaviyo endlich richtig nutzen wollen.",
+    description: "Für DTC-Brands, die Klaviyo endlich voll nutzen wollen – ohne Agentur.",
     featured: false,
-    cta: "Jetzt starten",
+    cta: "14 Tage kostenlos testen",
     features: [
-      "Performance-Dashboard",
-      "Bis zu 3 aktive Flows",
-      "Flow-Template-Bibliothek",
-      "1-Klick Klaviyo-Connect",
-      "E-Mail-Support",
+      "Core Dashboard (Revenue, Open Rate, CTR)",
+      "10 E-Mail-Templates",
+      "3 Flow-Guides (Welcome, Cart, Win-Back)",
+      "5 Segment-Vorlagen",
+      "1-Klick Klaviyo-Connect (OAuth)",
+      "Kampagnen-Kalender",
+      "Community-Support",
     ],
   },
   {
     name: "Growth",
-    price: "??",
+    price: "189",
     period: "/ Monat",
-    description: "Der Standard für wachsende DTC-Brands mit vollem Klaviyo-Potenzial.",
+    description: "Der Standard für wachsende DTC-Brands. ROI ab Woche 1.",
     featured: true,
-    cta: "Growth wählen",
+    cta: "14 Tage kostenlos testen",
     features: [
-      "Alles in Starter",
-      "Unbegrenzte Flows",
+      "Alles aus Core, plus:",
+      "Advanced Dashboard (CLV, Repurchase Rate, A/B)",
+      "Unlimitierte Templates & Flows",
       "Next-Best-Action Engine",
       "KI-gestütztes Copywriting",
-      "Deliverability & Reporting",
+      "Send-Time Optimization",
+      "Performance-Prognosen",
       "Priority-Support",
     ],
   },
   {
-    name: "Pro",
-    price: "??",
+    name: "Elite",
+    price: "349",
     period: "/ Monat",
-    description: "Für Teams mit mehreren Marken und individuellem Optimierungsbedarf.",
+    description: "Für Teams mit mehreren Brands und maximalem Optimierungsbedarf.",
     featured: false,
-    cta: "Pro wählen",
+    cta: "14 Tage kostenlos testen",
     features: [
-      "Alles in Growth",
+      "Alles aus Growth, plus:",
       "Mehrere Klaviyo-Accounts",
-      "Custom Automations",
-      "Dedizierter Onboarding-Call",
-      "SLA & dedizierter Support",
+      "Auto. Segment-Empfehlungen",
+      "Churn-Prävention",
+      "Custom Templates (Brand Voice)",
+      "A/B Test Vorlagen & Auswertung",
+      "Dedicated Support & SLA",
+      "Früher Zugang zu neuen Features",
     ],
   },
 ]
@@ -79,7 +85,8 @@ export function PricingSection() {
             Klar kalkulierbar.<br className="hidden sm:block" /> Kein Agentur-Budget.
           </h2>
           <p className="text-muted-foreground max-w-xl text-left text-base text-balance">
-            Alle 3 Tiers sind monatlich kündbar. Keine Kreditkarte für die Waitlist nötig.
+            Eine Klaviyo-Agentur kostet 1.500–3.000 € pro Monat. Rekurio ab 89 €.
+            Monatlich kündbar, 14 Tage kostenlos – keine Kreditkarte nötig.
           </p>
         </motion.div>
 

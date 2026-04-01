@@ -140,8 +140,15 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="text-muted-foreground mx-auto mt-12 max-w-6xl border-t border-white/[0.06] pt-8 text-center text-xs">
-          © {new Date().getFullYear()} {siteConfig.name}. Alle Rechte vorbehalten.
+        <div className="text-muted-foreground mx-auto mt-12 max-w-6xl border-t border-white/[0.06] pt-8 text-xs">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p>© {new Date().getFullYear()} {siteConfig.name}. Alle Rechte vorbehalten.</p>
+            <div className="flex items-center gap-5">
+              <Link href="/impressum" className="hover:text-foreground transition-colors">Impressum</Link>
+              <Link href="/datenschutz" className="hover:text-foreground transition-colors">Datenschutz</Link>
+              <Link href="/agb" className="hover:text-foreground transition-colors">AGB</Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

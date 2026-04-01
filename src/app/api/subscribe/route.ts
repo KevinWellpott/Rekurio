@@ -41,13 +41,8 @@ async function subscribeKlaviyo(email: string) {
                   type: "profile",
                   attributes: {
                     email,
-                    subscriptions: {
-                      email: {
-                        marketing: {
-                          consent: "SUBSCRIBED",
-                        },
-                      },
-                    },
+                    // Kein consent hier setzen – Klaviyo Double Opt-In Flow
+                    // übernimmt die Bestätigung und setzt SUBSCRIBED nach Klick.
                   },
                 },
               ],
