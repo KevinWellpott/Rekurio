@@ -1,5 +1,5 @@
 import { Icons } from "@/components/icons";
-import { FaTwitter } from "react-icons/fa";
+import { FaLinkedin, FaTwitter } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa6";
 import { RiInstagramFill } from "react-icons/ri";
 
@@ -9,25 +9,38 @@ export const siteConfig = {
   name: "Rekurio",
   description:
     "Mehr Revenue aus Klaviyo – ohne Agentur. Rekurio ist der Klaviyo-Assistent für DTC-Brands: Dashboard, Flows, KI-Copywriting und Next-Best-Actions. 14 Tage kostenlos.",
-  url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_APP_URL || "https://rekurio.de",
   keywords: [
     "Klaviyo optimieren",
     "Klaviyo Assistent",
     "Klaviyo Dashboard",
     "Klaviyo Flows",
-    "Email Marketing DTC",
-    "DTC Email Marketing Tool",
     "Klaviyo Agentur Alternative",
+    "Email Marketing DTC",
+    "DTC E-Mail Marketing Tool",
     "Retention Marketing Software",
     "Klaviyo Win-Back Flow",
+    "Klaviyo Welcome Flow",
+    "Klaviyo Abandoned Cart",
     "Email Automation DTC Brand",
+    "Klaviyo Next Best Action",
+    "Klaviyo KI Copywriting",
+    "Klaviyo für Shopify",
+    "E-Mail Marketing automatisieren",
+    "DTC Brand Umsatz steigern",
     "Rekurio",
   ],
   links: {
     email: "hello@rekurio.com",
     twitter: "#",
-    instagram: "#",
-    youtube: "#",
+    instagram: "https://www.instagram.com/rekurio.ai/",
+    youtube: "https://www.youtube.com/@Rekurioo",
+    linkedin: [
+      "https://www.linkedin.com/in/simon-paweletz-23910535b/",
+      "https://www.linkedin.com/in/kevin-wellpott-6130b235b/",
+      "https://www.linkedin.com/in/nico-puchta/",
+      "https://www.linkedin.com/in/tim-360bpm/",
+    ],
   },
   header: [
     {
@@ -157,14 +170,19 @@ export const siteConfig = {
           icon: <FaTwitter />,
         },
         {
-          href: "#",
+          href: "https://www.instagram.com/rekurio.ai/",
           text: "Instagram",
           icon: <RiInstagramFill />,
         },
         {
-          href: "#",
+          href: "https://www.youtube.com/@Rekurioo",
           text: "Youtube",
           icon: <FaYoutube />,
+        },
+        {
+          href: "https://www.linkedin.com/in/simon-paweletz-23910535b/",
+          text: "LinkedIn",
+          icon: <FaLinkedin />,
         },
       ],
     },

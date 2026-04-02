@@ -2,6 +2,7 @@ import Author from "@/components/blog-author";
 import { BlogLeadCapture } from "@/components/blog/blog-lead-capture";
 import { getPost } from "@/lib/blog";
 import { siteConfig } from "@/lib/config";
+import { getSiteBaseUrl } from "@/lib/site-url";
 import { absoluteResourceUrl, formatDate } from "@/lib/utils";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -18,7 +19,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     image,
   } = post.metadata;
 
-  const canonicalUrl = `${siteConfig.url}/blog/${post.slug}`;
+  const base = getSiteBaseUrl();
+  const canonicalUrl = `${base}/blog/${post.slug}`;
+  const ogImage = image || `${base}/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`;
 
   return {
     title,
@@ -32,20 +35,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       publishedTime,
       url: canonicalUrl,
-      images: [
-        {
-          url: image || `${siteConfig.url}/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      siteName: siteConfig.name,
+      locale: "de_DE",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [image || `${siteConfig.url}/og?title=${encodeURIComponent(title)}`],
+      images: [ogImage],
     },
   };
 }

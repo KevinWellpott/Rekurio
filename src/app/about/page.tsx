@@ -4,16 +4,38 @@ import { CtaSection } from "@/components/sections/cta-section"
 import { AboutMissionSection } from "@/components/sections/about-mission-section"
 import { AboutValuesSection } from "@/components/sections/about-values-section"
 import { constructMetadata } from "@/lib/utils"
+import { getSiteBaseUrl } from "@/lib/site-url"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Über uns – Warum wir Rekurio gebaut haben",
+  title: "Über uns – Das Team hinter Rekurio",
   description:
-    "Rekurio entstand aus einer einfachen Beobachtung: DTC-Brands zahlen für Klaviyo, nutzen aber nur einen Bruchteil. Wir haben das geändert.",
+    "Rekurio entstand aus einer einfachen Beobachtung: DTC-Brands zahlen für Klaviyo, nutzen aber nur einen Bruchteil. Wir haben den Klaviyo-Assistenten gebaut, den wir selbst gebraucht hätten.",
+  path: "/about",
 })
+
+const aboutJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  url: `${getSiteBaseUrl()}/about`,
+  name: "Über Rekurio",
+  description:
+    "Rekurio ist der Klaviyo-Assistent für DTC-Brands – gebaut von einem Team, das die Probleme aus der Praxis kennt.",
+  inLanguage: "de-DE",
+  publisher: {
+    "@type": "Organization",
+    name: "Rekurio",
+    url: getSiteBaseUrl(),
+  },
+}
 
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+      />
       <main className="flex flex-col gap-6 pb-10 md:gap-8">
         <Header />
         <section className="section-spacing section-divider-b relative overflow-hidden">
@@ -23,9 +45,6 @@ export default function AboutPage() {
           />
           <div className="container relative">
             <div className="mx-auto flex max-w-3xl flex-col items-start gap-5">
-              <span className="bg-primary/15 text-primary ring-primary/30 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase ring-1">
-                Über Rekurio
-              </span>
               <h1 className="from-foreground to-foreground/55 bg-linear-to-br from-30% bg-clip-text text-4xl font-semibold tracking-tight text-balance text-transparent sm:text-5xl">
                 Wir hassen es, wenn gutes E-Mail-Marketing an Komplexität scheitert.
               </h1>
