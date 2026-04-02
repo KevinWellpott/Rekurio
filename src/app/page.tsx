@@ -12,11 +12,32 @@ import { siteConfig } from "@/lib/config";
 import { getHomePageJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
-  title: "Klaviyo-Assistent für DTC-Brands – Rekurio",
+  title: "Rekurio – Klaviyo-Assistent für DTC-Brands",
   description:
-    "Mehr Revenue aus Klaviyo – ohne Agentur. Rekurio gibt DTC-Brands ein Dashboard, Flow-Templates und KI-Copywriting. 14 Tage kostenlos testen.",
+    "Mehr Revenue aus Klaviyo – ohne Agentur. Rekurio gibt DTC-Brands Dashboard, Flow-Templates, KI-Copywriting und Next-Best-Actions. 14 Tage kostenlos, keine Kreditkarte.",
+  keywords: [
+    "Klaviyo optimieren",
+    "Klaviyo Assistent",
+    "Klaviyo Dashboard",
+    "Klaviyo Flows",
+    "Email Marketing DTC",
+    "DTC Email Marketing Tool",
+    "Klaviyo Agentur Alternative",
+    "Retention Marketing Software",
+    "Klaviyo Win-Back Flow",
+    "Email Automation DTC Brand",
+    "Klaviyo Next Best Action",
+    "Klaviyo KI Copywriting",
+    "Rekurio",
+  ],
   alternates: {
     canonical: siteConfig.url,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rekurio – Klaviyo-Assistent für DTC-Brands",
+    description:
+      "Mehr Revenue aus Klaviyo – ohne Agentur. Dashboard, Flows, KI-Copywriting. 14 Tage kostenlos.",
   },
 };
 

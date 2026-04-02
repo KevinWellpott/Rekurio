@@ -7,9 +7,10 @@ import { CtaSection } from "@/components/sections/cta-section"
 import { constructMetadata } from "@/lib/utils"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Partner werden – 30 % Provision auf jeden Plan",
+  title: "Affiliate-Programm – 30 % Provision auf jeden Plan",
   description:
-    "Empfehle Rekurio und verdiene 30 % monatliche Provision auf jeden aktiven Account. Ideal für Agenturen, Berater und DTC-Content-Creator.",
+    "Empfehle Rekurio und verdiene dauerhaft 30 % Provision auf jeden aktiven Account. Ideal für Agenturen, E-Commerce-Berater und DTC-Content-Creator.",
+  path: "/partner",
 })
 
 export default function PartnerPage() {

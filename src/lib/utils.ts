@@ -26,13 +26,19 @@ export function constructMetadata({
   title = siteConfig.name,
   description = siteConfig.description,
   image = absoluteUrl("/og"),
+  path,
   ...props
 }: {
   title?: string;
   description?: string;
   image?: string;
+  /** Optionaler Seiten-Pfad (z. B. "/pricing") für kanonische URL */
+  path?: string;
   [key: string]: Metadata[keyof Metadata];
 }): Metadata {
+  const base = (process.env.NEXT_PUBLIC_APP_URL || siteConfig.url).replace(/\/$/, "");
+  const canonicalUrl = path ? `${base}${path}` : base;
+
   return {
     title: {
       template: "%s | " + siteConfig.name,
@@ -40,10 +46,13 @@ export function constructMetadata({
     },
     description: description || siteConfig.description,
     keywords: siteConfig.keywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
-      url: siteConfig.url,
+      url: canonicalUrl,
       siteName: siteConfig.name,
       images: [
         {
@@ -55,6 +64,12 @@ export function constructMetadata({
       ],
       type: "website",
       locale: "de_DE",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
     },
     icons: "/favicon.ico",
     metadataBase: new URL(siteConfig.url),
