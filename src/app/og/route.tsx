@@ -1,4 +1,3 @@
-import { Icons } from "@/components/icons";
 import { siteConfig } from "@/lib/config";
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
@@ -7,11 +6,12 @@ export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
-  const postTitle = searchParams.get("title") || siteConfig.description;
-  const font = fetch(
+  const title = searchParams.get("title") || "Mehr Revenue aus Klaviyo. Ohne Agentur.";
+  const description = searchParams.get("description") || "Dashboard, Flows und KI-Copywriting für DTC-Brands.";
+
+  const fontData = await fetch(
     new URL("../../assets/fonts/Inter-SemiBold.ttf", import.meta.url)
   ).then((res) => res.arrayBuffer());
-  const fontData = await font;
 
   return new ImageResponse(
     (
@@ -21,73 +21,180 @@ export async function GET(req: NextRequest) {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#fff",
-          // set background image if needed
-          backgroundImage: `url(${siteConfig.url}/og.png)`,
-          fontSize: 32,
-          fontWeight: 600,
+          backgroundColor: "#0a0a0a",
+          padding: "64px",
+          fontFamily: "Inter",
+          position: "relative",
         }}
       >
+        {/* Lime glow top-right */}
         <div
           style={{
-            position: "relative",
+            position: "absolute",
+            top: -80,
+            right: -80,
+            width: 400,
+            height: 400,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(209,254,73,0.18) 0%, transparent 70%)",
+          }}
+        />
+        {/* Lime glow bottom-left */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: -80,
+            left: -80,
+            width: 320,
+            height: 320,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(209,254,73,0.10) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Top: Logo + Badge */}
+        <div
+          style={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
             alignItems: "center",
-            top: "125px",
+            justifyContent: "space-between",
+            marginBottom: "auto",
           }}
         >
-          <Icons.logo
-            style={{
-              width: "64px",
-              height: "64px",
-            }}
-          />
-
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
               alignItems: "center",
-              fontSize: "64px",
-              fontWeight: "600",
-              marginTop: "24px",
-              textAlign: "center",
-              width: "80%",
-              letterSpacing: "-0.05em", // Added tighter tracking
+              gap: "12px",
             }}
           >
-            {postTitle}
+            {/* Logo dot */}
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: "10px",
+                background: "#d1fe49",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  width: 16,
+                  height: 16,
+                  borderRadius: "50%",
+                  background: "#0a0a0a",
+                }}
+              />
+            </div>
+            <span
+              style={{
+                fontSize: 26,
+                fontWeight: 700,
+                color: "#ffffff",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Rekurio
+            </span>
           </div>
           <div
             style={{
-              display: "flex",
-              fontSize: "16px",
-              fontWeight: "500",
-              marginTop: "16px",
-              color: "#808080",
+              background: "rgba(209,254,73,0.12)",
+              border: "1px solid rgba(209,254,73,0.3)",
+              borderRadius: "100px",
+              padding: "6px 16px",
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#d1fe49",
+              letterSpacing: "0.04em",
             }}
           >
-            {siteConfig.name}
+            Klaviyo-Assistent für DTC-Brands
           </div>
         </div>
 
-        <img
-          src={`${siteConfig.url}/dashboard.png`}
-          width={900}
+        {/* Main Content */}
+        <div
           style={{
-            position: "relative",
-            bottom: -160,
-            aspectRatio: "auto",
-            border: "4px solid lightgray",
-            background: "lightgray",
-            borderRadius: 20,
-            zIndex: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+            flex: 1,
+            justifyContent: "center",
           }}
-        />
+        >
+          <div
+            style={{
+              fontSize: title.length > 50 ? 52 : 64,
+              fontWeight: 700,
+              color: "#ffffff",
+              letterSpacing: "-0.04em",
+              lineHeight: 1.05,
+              maxWidth: "900px",
+            }}
+          >
+            {title}
+          </div>
+          <div
+            style={{
+              fontSize: 24,
+              fontWeight: 400,
+              color: "rgba(255,255,255,0.55)",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.4,
+              maxWidth: "700px",
+            }}
+          >
+            {description}
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingTop: "32px",
+            borderTop: "1px solid rgba(255,255,255,0.08)",
+            marginTop: "auto",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 16,
+              color: "rgba(255,255,255,0.35)",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            rekurio.com
+          </div>
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+            }}
+          >
+            {["14 Tage kostenlos", "Kein Abo-Risiko", "OAuth Connect"].map((tag) => (
+              <div
+                key={tag}
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "100px",
+                  padding: "5px 14px",
+                  fontSize: 13,
+                  color: "rgba(255,255,255,0.5)",
+                }}
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     ),
     {

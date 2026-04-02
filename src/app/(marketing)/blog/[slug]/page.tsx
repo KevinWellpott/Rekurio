@@ -1,4 +1,5 @@
 import Author from "@/components/blog-author";
+import { BlogLeadCapture } from "@/components/blog/blog-lead-capture";
 import { getPost } from "@/lib/blog";
 import { siteConfig } from "@/lib/config";
 import { formatDate } from "@/lib/utils";
@@ -17,18 +18,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     image,
   } = post.metadata;
 
+  const canonicalUrl = `${siteConfig.url}/blog/${post.slug}`;
+
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
       type: "article",
       publishedTime,
-      url: `${siteConfig.url}/blog/${post.slug}`,
+      url: canonicalUrl,
       images: [
         {
-          url: image,
+          url: image || `${siteConfig.url}/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
+          width: 1200,
+          height: 630,
+          alt: title,
         },
       ],
     },
@@ -36,7 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       card: "summary_large_image",
       title,
       description,
-      images: [image],
+      images: [image || `${siteConfig.url}/og?title=${encodeURIComponent(title)}`],
     },
   };
 }
@@ -122,6 +131,9 @@ export default async function Blog({
           className="prose dark:prose-invert mx-auto max-w-full"
           dangerouslySetInnerHTML={{ __html: post.source }}
         ></article>
+        <div className="mt-14">
+          <BlogLeadCapture placement="blog-post" />
+        </div>
         </div>
       </div>
     </section>

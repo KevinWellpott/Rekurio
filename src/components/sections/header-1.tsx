@@ -31,37 +31,32 @@ export function StickyHeader() {
 
   const navLinks = useMemo(
     () => [
-      { id: 1, label: "Problem", link: "#problem" },
-      { id: 2, label: "So funktioniert's", link: "#how-it-works" },
-      { id: 3, label: "Features", link: "#features" },
-      { id: 4, label: "Preise", link: "#pricing" },
+      { id: 1, label: "ROI", link: "/#roi" },
+      { id: 2, label: "Features", link: "/#features" },
+      { id: 3, label: "Preise", link: "/pricing" },
+      { id: 4, label: "Affiliate", link: "/partner" },
     ],
     []
   )
 
   return (
-    <header ref={stickyNavRef} className="sticky top-0 z-50 px-10 py-7 xl:px-0">
-      <nav className="relative mx-auto flex max-w-2xl items-center justify-between">
+    <header ref={stickyNavRef} className="sticky top-0 z-50 py-7">
+      <nav className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:items-center">
         <Link
           href="/"
-          className="relative block h-12 w-auto shrink-0 md:h-14"
+          className="relative block h-12 w-auto shrink-0 justify-self-start md:h-14"
           aria-label="Rekurio – zur Startseite"
         >
-          <motion.img
+          <img
             className="h-full w-auto max-h-14 object-contain object-left"
             src="/logo.svg"
             alt=""
             width={180}
             height={48}
-            animate={{
-              y: scrollY >= 120 ? -50 : 0,
-              opacity: scrollY >= 120 ? 0 : 1,
-            }}
-            transition={{ duration: 0.15 }}
           />
         </Link>
 
-        <ul className="sticky top-4 right-4 left-4 z-[60] hidden items-center justify-center gap-x-5 md:flex">
+        <div className="z-[60] hidden min-w-0 justify-self-center md:flex md:justify-center">
           <motion.div
             initial={{ x: 0 }}
             animate={{
@@ -118,7 +113,7 @@ export function StickyHeader() {
                     <li>
                       <Button asChild size="sm">
                         <a href={process.env.NEXT_PUBLIC_CALENDLY_URL || "#"} target="_blank" rel="noopener noreferrer">
-                          Call buchen
+                          Democall buchen
                         </a>
                       </Button>
                     </li>
@@ -127,27 +122,21 @@ export function StickyHeader() {
               </AnimatePresence>
             </motion.div>
           </motion.div>
-        </ul>
+        </div>
 
-        <motion.div
-          className="z-[999] hidden items-center gap-x-5 md:flex"
-          animate={{
-            y: scrollY >= 120 ? -50 : 0,
-            opacity: scrollY >= 120 ? 0 : 1,
-          }}
-          transition={{ duration: 0.15 }}
-        >
-          <Button asChild size="sm">
-            <a href={process.env.NEXT_PUBLIC_CALENDLY_URL || "#"} target="_blank" rel="noopener noreferrer">
-              Call buchen
-            </a>
+        <div className="z-[999] hidden items-center justify-end justify-self-end gap-2 md:flex">
+          <Button asChild variant="outline" size="sm" className="border-white/20 bg-transparent">
+            <Link href="/login">Login</Link>
           </Button>
-        </motion.div>
+          <Button asChild size="sm">
+            <Link href="/signup">Signup</Link>
+          </Button>
+        </div>
         <MotionConfig transition={{ duration: 0.3, ease: "easeInOut" }}>
           <motion.button
             onClick={() => setActive((prev) => !prev)}
             animate={active ? "open" : "close"}
-            className="relative flex h-8 w-8 items-center justify-center rounded-md md:hidden"
+            className="relative ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-md md:hidden"
           >
             <motion.span
               style={{ left: "50%", top: "35%", x: "-50%", y: "-50%" }}

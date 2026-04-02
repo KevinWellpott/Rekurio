@@ -2,15 +2,10 @@
 
 import { useState, useCallback } from "react"
 import { motion } from "motion/react"
-import { ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import posthog from "posthog-js"
 
 const viewportOnce = { once: true as const, amount: 0.2 }
-
-const calendlyUrl =
-  process.env.NEXT_PUBLIC_CALENDLY_URL?.trim() || "https://calendly.com"
 
 // Formatiert Zahlen als Euro (z.B. 12.400 €)
 function formatEur(value: number): string {
@@ -199,28 +194,12 @@ export function RoiCalculatorSection() {
             </div>
           </div>
 
-          {/* CTA */}
-          <div className="flex flex-col items-start gap-3 border-t border-white/8 px-8 py-6 sm:flex-row sm:items-center sm:justify-between md:px-10">
-            <p className="text-muted-foreground text-sm">
+          {/* Footer-Zeile */}
+          <div className="border-t border-white/8 px-8 py-6 md:px-10">
+            <p className="text-muted-foreground text-sm text-balance">
               <span className="text-foreground font-semibold">{formatEur(roi.untapped)}</span> ungenutztes Revenue –
               Rekurio holt davon einen messbaren Teil zurück.
             </p>
-            <Button asChild size="sm" className="group shrink-0">
-              <a
-                href={calendlyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  posthog.capture("roi_calculator_cta_clicked", {
-                    revenue_label: currentStep.label,
-                    untapped_eur: Math.round(roi.untapped),
-                  })
-                }
-              >
-                Demo buchen
-                <ChevronRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-              </a>
-            </Button>
           </div>
         </motion.div>
 
