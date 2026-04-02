@@ -11,6 +11,17 @@ export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL || siteConfig.url}${path}`;
 }
 
+/** Absolute URL for JSON-LD images etc.: accepts full URLs or site-relative paths. */
+export function absoluteResourceUrl(pathOrUrl: string) {
+  if (!pathOrUrl) return absoluteUrl("/og");
+  if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://")) {
+    return pathOrUrl;
+  }
+  const base = (process.env.NEXT_PUBLIC_APP_URL || siteConfig.url).replace(/\/$/, "");
+  const path = pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`;
+  return `${base}${path}`;
+}
+
 export function constructMetadata({
   title = siteConfig.name,
   description = siteConfig.description,

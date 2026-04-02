@@ -2,7 +2,7 @@ import Author from "@/components/blog-author";
 import { BlogLeadCapture } from "@/components/blog/blog-lead-capture";
 import { getPost } from "@/lib/blog";
 import { siteConfig } from "@/lib/config";
-import { formatDate } from "@/lib/utils";
+import { absoluteResourceUrl, formatDate } from "@/lib/utils";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -73,13 +73,27 @@ export default async function Blog({
             datePublished: post.metadata.publishedAt,
             dateModified: post.metadata.publishedAt,
             description: post.metadata.summary,
+            inLanguage: "de-DE",
             image: post.metadata.image
-              ? `${siteConfig.url}${post.metadata.image}`
+              ? absoluteResourceUrl(post.metadata.image)
               : `${siteConfig.url}/blog/${post.slug}/opengraph-image`,
             url: `${siteConfig.url}/blog/${post.slug}`,
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `${siteConfig.url}/blog/${post.slug}`,
+            },
             author: {
               "@type": "Person",
+              name: post.metadata.author,
+            },
+            publisher: {
+              "@type": "Organization",
               name: siteConfig.name,
+              url: siteConfig.url,
+              logo: {
+                "@type": "ImageObject",
+                url: absoluteResourceUrl("/logo.svg"),
+              },
             },
           }),
         }}
