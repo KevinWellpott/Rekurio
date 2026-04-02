@@ -331,14 +331,14 @@
   /* BG: fast transparent – Hintergrund soll DURCH das Glas sichtbar sein */
   --lq-bg: linear-gradient(
     158deg,
-    oklch(0.92 0.19 125 / 3.5%) 0%,   /* hauch Brand-Grün oben */
-    oklch(1 0 0 / 1.5%) 50%,           /* nahezu klar in der Mitte */
-    oklch(1 0 0 / 2.5%) 100%           /* minimal sichtbar unten */
+    oklch(1 0 0 / 3%) 0%,
+    oklch(1 0 0 / 1.5%) 50%,
+    oklch(1 0 0 / 2.5%) 100%
   );
-  /* Strong: prominente Elemente – noch minimal mehr Substanz */
+  /* Strong: prominente Elemente */
   --lq-bg-strong: linear-gradient(
     158deg,
-    oklch(0.92 0.19 125 / 5.5%) 0%,
+    oklch(1 0 0 / 5%) 0%,
     oklch(1 0 0 / 2.5%) 45%,
     oklch(1 0 0 / 4%) 100%
   );
@@ -353,29 +353,19 @@
 
   /* ── Shadow-Stack ────────────────────────────────────────────────────── */
   --lq-shadow:
-    /* 1) Harter weißer Specular – "Licht trifft Glaskante" */
     inset 0 1px 0 oklch(1 0 0 / 68%),
-    /* 2) Weicher Brand-Hauch dahinter (sehr gering) */
-    inset 0 2px 10px oklch(0.92 0.19 125 / 7%),
-    /* 3) Linke Rim-Licht */
     inset 1px 0 0 oklch(1 0 0 / 16%),
-    /* 4) Unterer Schatten – Glasdicke simulieren */
     inset 0 -1px 0 oklch(0 0 0 / 24%),
-    /* 5) Äußere Tiefe */
     0 8px 32px oklch(0 0 0 / 22%),
-    0 2px 8px oklch(0 0 0 / 12%),
-    /* 6) Brand-farbener Edge-Glow – ganz leise */
-    0 0 0 0.5px oklch(0.92 0.19 125 / 14%);
+    0 2px 8px oklch(0 0 0 / 12%);
 
   /* Strong – schärferer Specular, deutlichere Tiefe */
   --lq-shadow-strong:
     inset 0 1.5px 0 oklch(1 0 0 / 80%),
-    inset 0 3px 12px oklch(0.92 0.19 125 / 9%),
     inset 1.5px 0 0 oklch(1 0 0 / 20%),
     inset 0 -1.5px 0 oklch(0 0 0 / 28%),
     0 12px 40px oklch(0 0 0 / 28%),
-    0 4px 12px oklch(0 0 0 / 16%),
-    0 0 0 0.5px oklch(0.92 0.19 125 / 20%);
+    0 4px 12px oklch(0 0 0 / 16%);
 
   /* Legacy-Aliase (noch von body::after genutzt) */
   --surface-glass-border: oklch(1 0 0 / 16%);
@@ -386,30 +376,26 @@
   /** Trennlinie zwischen Marketing-Sections (volle Breite) */
   --section-divider: oklch(1 0 0 / 12%);
 
-  /* --- Seiten-Hintergrund: Bild + Abdunkelung (liegt hinter Glass-Sektionen) --- */
-  --page-bg-image: url("/site-background.png");
-  --page-bg-overlay: oklch(0.08 0.02 260 / 0.55);
-
-  /* --- Vollpage-Glass (eine Ebene über dem Hintergrundbild, keine Sektions-Ränder) --- */
-  --page-glass-tint: oklch(0.12 0.02 160 / 0.15);
-  --page-glass-blur: 20px;
+  /* --- Vollpage-Glass (Ebene über dem CSS-Hintergrund) --- */
+  --page-glass-tint: oklch(0.12 0.02 160 / 0.08);
+  --page-glass-blur: 0px;
 
   /* --- Marken- & UI-Farben (shadcn / Theme) --- */
   --brand: #d1fe49;
   --brand-foreground: oklch(0.16 0.02 125);
 
-  --background: oklch(0.12 0.01 260);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.18 0.02 260);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.16 0.02 260 / 0.92);
-  --popover-foreground: oklch(0.985 0 0);
+  --background: oklch(0.10 0.01 260);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.16 0.02 260);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.14 0.02 260 / 0.94);
+  --popover-foreground: oklch(1 0 0);
   --primary: var(--brand);
   --primary-foreground: var(--brand-foreground);
-  --secondary: oklch(0.22 0.02 260);
-  --secondary-foreground: oklch(0.88 0.17 125);
-  --muted: oklch(0.22 0.02 260);
-  --muted-foreground: oklch(0.72 0.02 260);
+  --secondary: oklch(0.20 0.02 260);
+  --secondary-foreground: oklch(0.92 0.17 125);
+  --muted: oklch(0.20 0.02 260);
+  --muted-foreground: oklch(0.88 0.015 260);
   --accent: oklch(0.24 0.03 260);
   --accent-foreground: oklch(0.88 0.17 125);
   --destructive: oklch(0.704 0.191 22.216);
@@ -450,6 +436,7 @@
   }
 }
 
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -471,23 +458,21 @@
     background-color: var(--background);
   }
 
-  /* Ebene 0: Vollflächiges Bild + Overlay (eigenes Layer unter dem Blur) */
+  /* Ebene 0: Hintergrundbild – sehr wenig Opacity, stark geblurrt */
   body::before {
     content: "";
     position: fixed;
-    inset: 0;
+    inset: -5%;
     z-index: 0;
     pointer-events: none;
-    background-image:
-      linear-gradient(var(--page-bg-overlay), var(--page-bg-overlay)),
-      var(--page-bg-image);
-    background-size: cover, cover;
-    background-position: center, center;
-    background-repeat: no-repeat;
-    /* fixed entfernt: Layer ist schon position:fixed, Anhang „fixed“ triggert oft Backdrop-Bugs */
+    background-image: url("/site-background.png");
+    background-size: cover;
+    background-position: center top;
+    opacity: 0.30;
+    filter: blur(12px);
   }
 
-  /* Ebene 1: Tönung + Blur über der Bildebene */
+  /* Ebene 1: Subtile Tönung */
   body::after {
     content: "";
     position: fixed;
@@ -495,13 +480,10 @@
     z-index: 1;
     pointer-events: none;
     background: var(--page-glass-tint);
-    backdrop-filter: blur(var(--page-glass-blur));
-    -webkit-backdrop-filter: blur(var(--page-glass-blur));
-    transform: translateZ(0);
-    backface-visibility: hidden;
   }
 
-  /* App-Inhalt über der Glass-Ebene */
+
+    /* App-Inhalt über der Glass-Ebene */
   body > * {
     position: relative;
     z-index: 2;
@@ -557,9 +539,10 @@
    * Über ein <div class="bg-dot-pattern pointer-events-none absolute inset-0" /> legen.
    */
   .bg-dot-pattern {
-    background-image: radial-gradient(oklch(1 0 0 / 0.055) 1px, transparent 1px);
+    background-image: radial-gradient(oklch(1 0 0 / 0.018) 1px, transparent 1px);
     background-size: 28px 28px;
   }
+
 
   .container {
     width: 100%;

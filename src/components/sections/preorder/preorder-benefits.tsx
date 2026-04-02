@@ -44,7 +44,7 @@ function IlluHeadstart() {
         <polygon points="9,8 14,20 0,14" fill="oklch(0.7 0.15 125)" />
         <ellipse cx="0" cy="4" rx="4" ry="5" fill="oklch(0.16 0.02 125)" />
         {/* Flame */}
-        <ellipse cx="0" cy="20" rx="4" ry="7" fill="oklch(0.78 0.16 72 / 0.8)" />
+        <ellipse cx="0" cy="20" rx="4" ry="7" fill="oklch(0.92 0.19 125 / 0.8)" />
       </g>
       {/* Stars */}
       {[[260,38],[270,58],[248,52],[240,30],[275,42]].map(([x,y], i) => (
@@ -57,23 +57,23 @@ function IlluHeadstart() {
 function IlluDiscount() {
   return (
     <svg viewBox="0 0 320 180" fill="none" className="h-full w-full" aria-hidden>
-      <ellipse cx="160" cy="90" rx="110" ry="65" fill="oklch(0.65 0.22 280 / 0.07)" />
+      <ellipse cx="160" cy="90" rx="110" ry="65" fill="oklch(0.92 0.19 125 / 0.05)" />
       {/* Big price tag */}
-      <path d="M100 55 L190 55 L220 90 L190 125 L100 125 Z" fill="oklch(0.65 0.22 280 / 0.15)" stroke="oklch(0.65 0.22 280 / 0.35)" strokeWidth="1.5" />
+      <path d="M100 55 L190 55 L220 90 L190 125 L100 125 Z" fill="oklch(0.92 0.19 125 / 0.12)" stroke="oklch(0.92 0.19 125 / 0.30)" strokeWidth="1.5" />
       {/* Hole in tag */}
-      <circle cx="115" cy="90" r="8" fill="none" stroke="oklch(0.65 0.22 280 / 0.5)" strokeWidth="2" />
+      <circle cx="115" cy="90" r="8" fill="none" stroke="oklch(0.92 0.19 125 / 0.45)" strokeWidth="2" />
       {/* Percent symbol */}
-      <text x="165" y="99" textAnchor="middle" fill="oklch(0.75 0.22 280)" fontSize="42" fontWeight="800" fontFamily="ui-sans-serif" letterSpacing="-2">
+      <text x="165" y="99" textAnchor="middle" fill="oklch(0.92 0.19 125)" fontSize="42" fontWeight="800" fontFamily="ui-sans-serif" letterSpacing="-2">
         {`${EARLY_ACCESS_DISCOUNT_PERCENT}%`}
       </text>
       {/* "off forever" ribbon */}
-      <rect x="88" y="133" width="148" height="22" rx="11" fill="oklch(0.65 0.22 280 / 0.18)" stroke="oklch(0.65 0.22 280 / 0.3)" strokeWidth="1" />
-      <text x="162" y="148" textAnchor="middle" fill="oklch(0.75 0.22 280)" fontSize="10" fontWeight="600" fontFamily="ui-sans-serif" letterSpacing="1">DAUERHAFT · KEIN LIMIT</text>
+      <rect x="88" y="133" width="148" height="22" rx="11" fill="oklch(0.92 0.19 125 / 0.14)" stroke="oklch(0.92 0.19 125 / 0.25)" strokeWidth="1" />
+      <text x="162" y="148" textAnchor="middle" fill="oklch(0.92 0.19 125)" fontSize="10" fontWeight="600" fontFamily="ui-sans-serif" letterSpacing="1">DAUERHAFT · KEIN LIMIT</text>
       {/* Sparkles */}
       {[[62,50],[258,48],[268,110],[55,115]].map(([x,y], i) => (
         <g key={i} transform={`translate(${x},${y})`}>
-          <line x1="0" y1="-6" x2="0" y2="6" stroke="oklch(0.65 0.22 280 / 0.5)" strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="-6" y1="0" x2="6" y2="0" stroke="oklch(0.65 0.22 280 / 0.5)" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="0" y1="-6" x2="0" y2="6" stroke="oklch(0.92 0.19 125 / 0.45)" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="-6" y1="0" x2="6" y2="0" stroke="oklch(0.92 0.19 125 / 0.45)" strokeWidth="1.5" strokeLinecap="round" />
         </g>
       ))}
     </svg>
@@ -83,13 +83,13 @@ function IlluDiscount() {
 function IlluChat() {
   return (
     <svg viewBox="0 0 320 180" fill="none" className="h-full w-full" aria-hidden>
-      <ellipse cx="160" cy="95" rx="115" ry="65" fill="oklch(0.60 0.22 20 / 0.06)" />
+      <ellipse cx="160" cy="95" rx="115" ry="65" fill="oklch(0.92 0.19 125 / 0.04)" />
       {/* You bubble */}
-      <rect x="55" y="42" width="130" height="52" rx="16" fill="oklch(0.60 0.22 20 / 0.2)" stroke="oklch(0.60 0.22 20 / 0.4)" strokeWidth="1.5" />
-      <polygon points="70,94 60,110 86,94" fill="oklch(0.60 0.22 20 / 0.2)" />
+      <rect x="55" y="42" width="130" height="52" rx="16" fill="oklch(0.92 0.19 125 / 0.14)" stroke="oklch(0.92 0.19 125 / 0.30)" strokeWidth="1.5" />
+      <polygon points="70,94 60,110 86,94" fill="oklch(0.92 0.19 125 / 0.14)" />
       {/* Message lines */}
-      <rect x="70" y="57" width="80" height="7" rx="3.5" fill="oklch(0.60 0.22 20 / 0.5)" />
-      <rect x="70" y="69" width="55" height="7" rx="3.5" fill="oklch(0.60 0.22 20 / 0.3)" />
+      <rect x="70" y="57" width="80" height="7" rx="3.5" fill="oklch(0.92 0.19 125 / 0.40)" />
+      <rect x="70" y="69" width="55" height="7" rx="3.5" fill="oklch(0.92 0.19 125 / 0.25)" />
       {/* Team bubble */}
       <rect x="145" y="100" width="118" height="52" rx="16" fill="oklch(1 0 0 / 0.06)" stroke="oklch(1 0 0 / 0.14)" strokeWidth="1.5" />
       <polygon points="248,100 263,86 258,100" fill="oklch(1 0 0 / 0.06)" />
@@ -101,8 +101,8 @@ function IlluChat() {
         <polygon points="6,0 0,10 5,10 -1,22 8,10 3,10 9,0" fill="oklch(0.88 0.19 125)" />
       </g>
       {/* Avatar circles */}
-      <circle cx="70" cy="118" r="12" fill="oklch(0.60 0.22 20 / 0.25)" stroke="oklch(0.60 0.22 20 / 0.5)" strokeWidth="1.5" />
-      <text x="70" y="122" textAnchor="middle" fill="oklch(0.70 0.22 20)" fontSize="9" fontWeight="700" fontFamily="ui-sans-serif">YOU</text>
+      <circle cx="70" cy="118" r="12" fill="oklch(0.92 0.19 125 / 0.18)" stroke="oklch(0.92 0.19 125 / 0.40)" strokeWidth="1.5" />
+      <text x="70" y="122" textAnchor="middle" fill="oklch(0.92 0.19 125)" fontSize="9" fontWeight="700" fontFamily="ui-sans-serif">YOU</text>
       <circle cx="253" cy="82" r="12" fill="oklch(0.88 0.19 125 / 0.2)" stroke="oklch(0.88 0.19 125 / 0.4)" strokeWidth="1.5" />
       <text x="253" y="86" textAnchor="middle" fill="oklch(0.78 0.19 125)" fontSize="8" fontWeight="700" fontFamily="ui-sans-serif">TEAM</text>
     </svg>
@@ -112,7 +112,7 @@ function IlluChat() {
 function IlluOnboarding() {
   return (
     <svg viewBox="0 0 320 180" fill="none" className="h-full w-full" aria-hidden>
-      <ellipse cx="160" cy="90" rx="115" ry="65" fill="oklch(0.68 0.18 220 / 0.06)" />
+      <ellipse cx="160" cy="90" rx="115" ry="65" fill="oklch(0.92 0.19 125 / 0.04)" />
       {/* Laptop frame */}
       <rect x="75" y="45" width="170" height="105" rx="10" fill="oklch(1 0 0 / 0.05)" stroke="oklch(1 0 0 / 0.12)" strokeWidth="1.5" />
       <rect x="75" y="45" width="170" height="110" rx="10" fill="none" stroke="oklch(1 0 0 / 0.12)" strokeWidth="1.5" />
@@ -122,7 +122,7 @@ function IlluOnboarding() {
       {[
         { y: 68, done: true,  label: "Klaviyo verbinden", color: "oklch(0.88 0.19 125)" },
         { y: 88, done: true,  label: "Flows einrichten",  color: "oklch(0.88 0.19 125)" },
-        { y: 108, done: false, label: "Erste Revenue live", color: "oklch(0.68 0.18 220)" },
+        { y: 108, done: false, label: "Erste Revenue live", color: "oklch(0.92 0.19 125)" },
       ].map((item, i) => (
         <g key={i}>
           <circle cx="100" cy={item.y} r="6" fill={item.done ? item.color : "oklch(1 0 0 / 0.08)"} stroke={item.done ? "none" : "oklch(1 0 0 / 0.2)"} strokeWidth="1" />
@@ -140,9 +140,9 @@ function IlluOnboarding() {
         </g>
       ))}
       {/* "No call" badge */}
-      <rect x="186" y="100" width="42" height="22" rx="11" fill="oklch(0.60 0.22 20 / 0.15)" stroke="oklch(0.60 0.22 20 / 0.3)" strokeWidth="1" />
-      <text x="207" y="115" textAnchor="middle" fill="oklch(0.65 0.22 20)" fontSize="8" fontWeight="700" fontFamily="ui-sans-serif">No Call</text>
-      <line x1="186" y1="100" x2="228" y2="122" stroke="oklch(0.60 0.22 20 / 0.5)" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="186" y="100" width="42" height="22" rx="11" fill="oklch(0.92 0.19 125 / 0.12)" stroke="oklch(0.92 0.19 125 / 0.25)" strokeWidth="1" />
+      <text x="207" y="115" textAnchor="middle" fill="oklch(0.92 0.19 125)" fontSize="8" fontWeight="700" fontFamily="ui-sans-serif">No Call</text>
+      <line x1="186" y1="100" x2="228" y2="122" stroke="oklch(0.92 0.19 125 / 0.40)" strokeWidth="1.5" strokeLinecap="round" />
       {/* Laptop base */}
       <rect x="60" y="154" width="200" height="8" rx="4" fill="oklch(1 0 0 / 0.08)" stroke="oklch(1 0 0 / 0.1)" strokeWidth="1" />
       {/* Camera dot */}
@@ -157,36 +157,36 @@ const slides = [
   {
     Illustration: IlluHeadstart,
     label: "Kern-Vorteil",
-    accentBg: "bg-primary/12",
-    accentBorder: "border-primary/25",
-    accentText: "text-primary",
+    accentBg: "bg-white/4",
+    accentBorder: "border-white/8",
+    accentText: "text-muted-foreground",
     title: "Einen Monat Vorsprung",
     body: `Während andere noch auf den öffentlichen Launch warten, hast du Rekurio bereits im Einsatz. Flows laufen, Revenue kommt – ein voller Monat früher.`,
   },
   {
     Illustration: IlluDiscount,
     label: "Dauerhaft",
-    accentBg: "bg-violet-500/12",
-    accentBorder: "border-violet-500/25",
-    accentText: "text-violet-400",
+    accentBg: "bg-white/4",
+    accentBorder: "border-white/8",
+    accentText: "text-muted-foreground",
     title: `Dauerhaft ${EARLY_ACCESS_DISCOUNT_PERCENT}\u00a0% günstiger`,
     body: `Kein zeitliches Limit – solange du Kunde bleibst, zahlst du weniger als jeder, der nach dem Launch einsteigt.`,
   },
   {
     Illustration: IlluChat,
     label: "Direkter Draht",
-    accentBg: "bg-rose-500/12",
-    accentBorder: "border-rose-500/25",
-    accentText: "text-rose-400",
+    accentBg: "bg-white/4",
+    accentBorder: "border-white/8",
+    accentText: "text-muted-foreground",
     title: "Direkter Draht zum Team",
     body: `Kein Ticket-System, keine anonyme Hotline. Du erreichst uns direkt – und dein Feedback fließt direkt in die Roadmap.`,
   },
   {
     Illustration: IlluOnboarding,
     label: "Ohne Zwang",
-    accentBg: "bg-sky-500/12",
-    accentBorder: "border-sky-500/25",
-    accentText: "text-sky-400",
+    accentBg: "bg-white/4",
+    accentBorder: "border-white/8",
+    accentText: "text-muted-foreground",
     title: "Onboarding ohne Pflicht-Call",
     body: `Wir begleiten dich beim Start – per Video, Chat oder Live, ganz wie es dir passt. Kein Sales-Call als Voraussetzung.`,
   },
@@ -216,18 +216,14 @@ function BenefitsCarousel() {
                 className="min-w-0 shrink-0 grow-0 basis-[min(320px,85vw)]"
               >
                 <div
-                  className={cn(
-                    "flex h-full min-h-[380px] flex-col overflow-hidden rounded-2xl border",
-                    slide.accentBorder,
-                    slide.accentBg,
-                  )}
+                  className="glass flex h-full min-h-[380px] flex-col overflow-hidden rounded-2xl"
                 >
                   {/* Illustration */}
                   <div className="relative flex-1 overflow-hidden">
                     <Illustration />
                   </div>
                   {/* Content */}
-                  <div className="flex flex-col gap-2 border-t border-white/8 p-5">
+                  <div className="flex flex-col gap-2 border-t border-white/8 p-5 sm:p-5">
                     <span className={cn("text-[10px] font-bold uppercase tracking-widest", slide.accentText)}>
                       {slide.label}
                     </span>

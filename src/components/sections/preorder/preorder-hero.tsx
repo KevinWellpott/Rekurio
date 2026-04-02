@@ -121,15 +121,8 @@ function BadgeItem({ badge }: { badge: Badge }) {
           : "text-foreground/70"
       )}
       style={badge.highlighted ? undefined : {
-        background: hovered
-          ? "linear-gradient(158deg, rgba(209,254,73,0.055) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.03) 100%)"
-          : "linear-gradient(158deg, rgba(209,254,73,0.03) 0%, rgba(255,255,255,0.012) 50%, rgba(255,255,255,0.022) 100%)",
-        border: "1px solid rgba(255,255,255,0.16)",
-        backdropFilter: "blur(44px) saturate(250%) brightness(1.02)",
-        WebkitBackdropFilter: "blur(44px) saturate(250%) brightness(1.02)",
-        boxShadow: hovered
-          ? `inset 0 1px 0 rgba(255,255,255,0.72), inset 0 2px 10px rgba(209,254,73,0.08), inset 1px 0 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(0,0,0,0.22), 0 6px 24px rgba(0,0,0,0.20), 0 0 16px 3px ${badge.glowColor}`
-          : "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 2px 8px rgba(209,254,73,0.05), inset 1px 0 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.18), 0 4px 14px rgba(0,0,0,0.16)",
+        background: hovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.10)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -139,11 +132,7 @@ function BadgeItem({ badge }: { badge: Badge }) {
           "flex h-6 w-6 shrink-0 items-center justify-center rounded-md transition-all duration-300",
           badge.highlighted ? "bg-primary" : badge.iconBg
         )}
-        style={
-          hovered && !badge.highlighted
-            ? { boxShadow: `0 0 14px 3px ${badge.glowColor}` }
-            : undefined
-        }
+        style={undefined}
       >
         <Icon
           className={cn(
@@ -286,7 +275,7 @@ export function PreorderHero() {
           {/* Headline */}
           <div className="flex flex-col gap-5">
             <motion.h1
-              className="from-foreground to-foreground/50 bg-linear-to-br from-25% bg-clip-text text-[2.6rem] leading-[1.07] font-semibold tracking-[-0.04em] text-balance text-transparent sm:text-5xl md:text-[3.5rem]"
+              className="from-foreground to-foreground/50 bg-linear-to-br from-25% bg-clip-text text-[1.9rem] leading-[1.08] font-semibold tracking-[-0.035em] text-balance text-transparent sm:text-[2.6rem] sm:leading-[1.07] sm:tracking-[-0.04em] md:text-5xl lg:text-[3.5rem]"
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
@@ -296,7 +285,7 @@ export function PreorderHero() {
             </motion.h1>
 
             <motion.p
-              className="text-muted-foreground mx-auto max-w-lg text-lg leading-relaxed tracking-tight text-balance"
+              className="text-muted-foreground mx-auto max-w-lg text-base leading-relaxed tracking-tight text-balance sm:text-lg"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
@@ -317,11 +306,11 @@ export function PreorderHero() {
           >
             <div className="grid grid-cols-3">
               {offerItems.map((item) => (
-                <div key={item.label} className="flex flex-col items-center gap-0.5 px-3 py-3.5">
-                  <span className="text-primary text-lg font-bold tracking-tight leading-none">
+                <div key={item.label} className="flex flex-col items-center gap-0.5 px-2 py-3 sm:px-3 sm:py-3.5">
+                  <span className="text-primary text-base font-bold tracking-tight leading-none sm:text-lg">
                     {item.value}
                   </span>
-                  <span className="text-muted-foreground text-[10px] leading-tight text-center">
+                  <span className="text-muted-foreground text-[9px] leading-tight text-center sm:text-[10px]">
                     {item.label}
                   </span>
                 </div>

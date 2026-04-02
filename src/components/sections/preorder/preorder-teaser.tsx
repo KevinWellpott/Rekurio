@@ -10,16 +10,10 @@ import {
 import { cn } from "@/lib/utils"
 
 // ── Liquid Glass helpers ──────────────────────────────────────────────────────
-const LQ_BG = "linear-gradient(158deg,rgba(209,254,73,0.035) 0%,rgba(255,255,255,0.015) 50%,rgba(255,255,255,0.025) 100%)"
-const LQ_FILTER = "blur(44px) saturate(250%) brightness(1.02)"
-const LQ_BORDER = "1px solid rgba(255,255,255,0.16)"
 
-function lqShadow(accentRgba: string, hovered: boolean) {
-  const spec = "inset 0 1.5px 0 rgba(255,255,255,0.80),inset 0 3px 12px rgba(209,254,73,0.08),inset 1.5px 0 0 rgba(255,255,255,0.18),inset 0 -1.5px 0 rgba(0,0,0,0.26)"
-  const depth = hovered
-    ? `0 20px 56px rgba(0,0,0,0.38),0 4px 14px rgba(0,0,0,0.22),0 0 0 0.5px ${accentRgba}0.32)`
-    : `0 8px 32px rgba(0,0,0,0.22),0 2px 8px rgba(0,0,0,0.12),0 0 0 0.5px ${accentRgba}0.16)`
-  return `${spec},${depth}`
+function lqShadow(_accentRgba: string, hovered: boolean) {
+  if (!hovered) return "" // use --lq-shadow from .glass class when not hovered
+  return "inset 0 1px 0 oklch(1 0 0 / 68%),inset 1px 0 0 oklch(1 0 0 / 16%),inset 0 -1px 0 oklch(0 0 0 / 24%),0 20px 48px oklch(0 0 0 / 36%),0 6px 16px oklch(0 0 0 / 20%)"
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -93,9 +87,9 @@ function VisualWinBack() {
   return (
     <div className="flex h-full flex-col gap-1.5 p-5">
       <p className="mb-1 text-[9px] uppercase tracking-widest text-white/30">Win-Back Flow</p>
-      <div className="mb-2 rounded-lg border border-rose-500/20 bg-rose-500/6 px-3 py-2">
+      <div className="mb-2 rounded-lg border border-primary/20 bg-primary/6 px-3 py-2">
         <p className="text-[9px] text-white/30 uppercase tracking-wide">Ungenutztes Potenzial</p>
-        <p className="text-xl font-bold text-rose-400">+€ 840 / Mo.</p>
+        <p className="text-xl font-bold text-primary">+€ 840 / Mo.</p>
       </div>
       {WB_STEPS.map((s, i) => (
         <AnimatePresence key={s.label}>
@@ -187,11 +181,11 @@ function VisualCopywriting() {
           ))}
         </div>
       </div>
-      <div className="flex items-center gap-1.5 self-start rounded-full bg-sky-500/10 px-3 py-1.5 ring-1 ring-sky-500/20">
+      <div className="flex items-center gap-1.5 self-start rounded-full bg-primary/10 px-3 py-1.5 ring-1 ring-primary/20">
         <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
-          <Sparkles className="size-3 text-sky-400" />
+          <Sparkles className="size-3 text-primary" />
         </motion.div>
-        <span className="text-[10px] font-medium text-sky-400">KI-Vorschlag generiert</span>
+        <span className="text-[10px] font-medium text-primary">KI-Vorschlag generiert</span>
       </div>
     </div>
   )
@@ -214,7 +208,7 @@ function VisualCart() {
         {CART_ITEMS.map((item, i) => (
           <motion.div key={item} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}
             className="flex items-center gap-2 rounded-lg border border-white/7 bg-white/[0.025] px-3 py-2">
-            <ShoppingCart className="size-3 shrink-0 text-amber-400/60" />
+            <ShoppingCart className="size-3 shrink-0 text-primary/60" />
             <span className="flex-1 text-xs text-foreground/70">{item}</span>
           </motion.div>
         ))}
@@ -229,9 +223,9 @@ function VisualCart() {
           </motion.div>
         ))}
       </div>
-      <div className="rounded-lg border border-amber-400/20 bg-amber-400/6 px-3 py-2">
+      <div className="rounded-lg border border-primary/20 bg-primary/6 px-3 py-2">
         <span className="text-[9px] uppercase tracking-wide text-white/30">Recovery Revenue</span>
-        <p className="text-lg font-bold text-amber-400">+€ 890 / Mo.</p>
+        <p className="text-lg font-bold text-primary">+€ 890 / Mo.</p>
       </div>
     </div>
   )
@@ -419,64 +413,64 @@ const CARDS: CardDef[] = [
     id: "dashboard", icon: BarChart3,
     title: "Performance-Dashboard",
     desc: "Revenue, Open Rates und Deliverability auf einen Blick — live aus Klaviyo.",
-    Visual: VisualDashboard, col: "col-span-3 lg:col-span-2",
+    Visual: VisualDashboard, col: "col-span-3 md:col-span-2",
     accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "winback", icon: RefreshCcw,
     title: "Win-Back Automation",
     desc: "Inaktive Kunden reaktivieren — zur richtigen Zeit, mit dem richtigen Angebot.",
-    Visual: VisualWinBack, col: "col-span-3 lg:col-span-1",
-    accent: "rgba(251,113,133,", accentFull: "oklch(0.60 0.22 20)",
+    Visual: VisualWinBack, col: "col-span-3 md:col-span-1",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "nba", icon: Zap,
     title: "Next-Best-Action Engine",
     desc: "Die eine Maßnahme pro Tag, die deinen Umsatz am meisten bewegt.",
-    Visual: VisualNBA, col: "col-span-3 lg:col-span-1",
-    accent: "rgba(139,92,246,", accentFull: "oklch(0.65 0.22 280)",
+    Visual: VisualNBA, col: "col-span-3 md:col-span-1",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "copy", icon: Sparkles,
     title: "KI-Copywriting",
     desc: "Personalisierte Betreffzeilen und Flows, die konvertieren — in Sekunden.",
-    Visual: VisualCopywriting, col: "col-span-3 lg:col-span-2",
-    accent: "rgba(56,189,248,", accentFull: "oklch(0.68 0.18 220)",
+    Visual: VisualCopywriting, col: "col-span-3 md:col-span-2",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "cart", icon: ShoppingCart,
     title: "Abandoned Cart Recovery",
     desc: "Automatisierte Sequenz: sofort, 1h, 24h — jedes verlorene Item eine zweite Chance.",
-    Visual: VisualCart, col: "col-span-3 lg:col-span-1",
-    accent: "rgba(251,191,36,", accentFull: "oklch(0.78 0.16 72)",
+    Visual: VisualCart, col: "col-span-3 md:col-span-1",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "flows", icon: GitBranch,
     title: "Flow-Templates",
     desc: "Welcome, Cart, Win-Back — Best-Practice-Flows, direkt in Klaviyo einsatzbereit.",
-    Visual: VisualFlows, col: "col-span-3 lg:col-span-1",
-    accent: "rgba(52,211,153,", accentFull: "oklch(0.70 0.18 155)",
+    Visual: VisualFlows, col: "col-span-3 md:col-span-1",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "segment", icon: Users2,
     title: "Segmentierung",
     desc: "Champions, Aktive, At-Risk — automatisch klassifiziert und stets aktuell.",
-    Visual: VisualSegment, col: "col-span-3 lg:col-span-1",
-    accent: "rgba(99,102,241,", accentFull: "oklch(0.60 0.20 260)",
+    Visual: VisualSegment, col: "col-span-3 md:col-span-1",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "roi", icon: TrendingUp,
     title: "ROI-Rechner",
     desc: "Sieh sofort, wie viel Revenue du monatlich liegen lässt.",
-    Visual: VisualROI, col: "col-span-3 lg:col-span-2",
-    accent: "rgba(209,254,73,", accentFull: "oklch(0.88 0.16 195)",
+    Visual: VisualROI, col: "col-span-3 md:col-span-2",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
   {
     id: "oauth", icon: Link2,
     title: "Klaviyo OAuth Connect",
     desc: "Kein API-Key, kein IT-Ticket. Verbunden in 60 Sekunden.",
-    Visual: VisualOAuth, col: "col-span-3 lg:col-span-1",
-    accent: "rgba(255,255,255,", accentFull: "rgba(255,255,255,0.7)",
+    Visual: VisualOAuth, col: "col-span-3 md:col-span-1",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
   },
 ]
 
@@ -490,27 +484,31 @@ function BentoCard({ card }: { card: CardDef }) {
   const { Visual } = card
   return (
     <motion.div
-      className={cn("group relative flex flex-col overflow-hidden rounded-2xl", card.col)}
-      style={{ background: LQ_BG, border: LQ_BORDER, backdropFilter: LQ_FILTER, WebkitBackdropFilter: LQ_FILTER, boxShadow: lqShadow(card.accent, hovered) }}
+      className={cn("glass group relative flex flex-col overflow-hidden rounded-2xl", card.col)}
+      style={{ boxShadow: lqShadow(card.accent, hovered) }}
       animate={{ y: hovered ? -4 : 0 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="relative min-h-[11rem] flex-1 overflow-hidden">
+      <div className="relative min-h-[6rem] flex-1 overflow-hidden sm:min-h-[9rem] md:min-h-[11rem]">
         <Visual />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/20 to-transparent dark:from-black/30" />
       </div>
 
-      <div className="relative border-t border-white/8 p-5">
+      <div className="relative border-t border-border p-3.5 sm:p-5">
         <motion.div animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.3 }}
           className="pointer-events-none absolute inset-0 rounded-b-2xl"
-          style={{ background: `radial-gradient(ellipse 70% 120% at 15% 110%,${card.accent}0.10),transparent 70%)` }} />
-        <motion.div animate={{ color: hovered ? card.accentFull : "rgba(255,255,255,0.35)" }} transition={{ duration: 0.22 }}>
-          <Icon className="mb-3 size-5" />
+          style={{ background: `radial-gradient(ellipse 70% 120% at 15% 110%,${card.accent}0.05),transparent 70%)` }} />
+        <motion.div
+          animate={{ color: hovered ? card.accentFull : undefined }}
+          transition={{ duration: 0.22 }}
+          className="text-foreground/30 dark:text-white/35"
+        >
+          <Icon className="mb-2 size-4 sm:mb-3 sm:size-5" />
         </motion.div>
-        <h3 className="mb-1.5 text-sm font-semibold tracking-tight text-foreground/90 transition-colors duration-200 group-hover:text-foreground">{card.title}</h3>
-        <p className="text-xs leading-relaxed text-muted-foreground">{card.desc}</p>
+        <h3 className="mb-1 text-xs font-semibold tracking-tight text-foreground/90 transition-colors duration-200 group-hover:text-foreground sm:mb-1.5 sm:text-sm">{card.title}</h3>
+        <p className="text-[11px] leading-relaxed text-muted-foreground sm:text-xs">{card.desc}</p>
       </div>
     </motion.div>
   )
@@ -542,7 +540,7 @@ export function PreorderTeaser() {
         </motion.div>
 
         <motion.div
-          className="grid w-full auto-rows-[20rem] grid-cols-3 gap-4 md:auto-rows-[22rem]"
+          className="grid w-full auto-rows-[15rem] grid-cols-3 gap-2.5 sm:auto-rows-[17rem] md:auto-rows-[20rem] md:gap-4 lg:auto-rows-[22rem]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={viewportOnce}
