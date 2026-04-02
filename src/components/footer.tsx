@@ -9,18 +9,33 @@ import { siteConfig } from "@/lib/config"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const footerLinks: { title: string; url: string }[][] = [
-  [
-    { title: "Problem", url: "/#problem" },
-    { title: "Features", url: "/#features" },
-    { title: "Preise", url: "/#pricing" },
-    { title: "So funktioniert's", url: "/#how-it-works" },
-  ],
-  [
-    { title: "Blog", url: "/blog" },
-    { title: "Early Access", url: "/preorder" },
-    { title: "Zum Launch", url: "/#cta" },
-  ],
+const footerColumns: {
+  heading?: string
+  links: { title: string; url: string }[]
+}[] = [
+  {
+    links: [
+      { title: "ROI", url: "/#roi" },
+      { title: "Preise", url: "/pricing" },
+      { title: "Partner", url: "/partner" },
+      { title: "Demo buchen", url: "/pricing" },
+    ],
+  },
+  {
+    heading: "Rechtliches",
+    links: [
+      { title: "Impressum", url: "/impressum" },
+      { title: "Datenschutz", url: "/datenschutz" },
+      { title: "AGB", url: "/agb" },
+    ],
+  },
+  {
+    links: [
+      { title: "Blog", url: "/blog" },
+      { title: "Über uns", url: "/about" },
+      { title: "Early Access", url: "/preorder" },
+    ],
+  },
 ]
 
 export function Footer() {
@@ -80,19 +95,26 @@ export function Footer() {
           </div>
 
           <div className="flex flex-wrap items-start justify-start gap-x-12 gap-y-8 sm:gap-x-16">
-            {footerLinks.map((column, columnIndex) => (
-              <ul key={columnIndex} className="flex flex-col gap-y-2">
-                {column.map((link) => (
-                  <li key={link.title}>
-                    <Link
-                      href={link.url}
-                      className="text-[15px] font-medium text-muted-foreground transition-colors duration-100 hover:text-foreground hover:underline hover:underline-offset-4"
-                    >
-                      {link.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            {footerColumns.map((column, columnIndex) => (
+              <div key={columnIndex} className="flex flex-col gap-y-3">
+                {column.heading ? (
+                  <p className="text-foreground text-xs font-semibold tracking-wide uppercase">
+                    {column.heading}
+                  </p>
+                ) : null}
+                <ul className="flex flex-col gap-y-2">
+                  {column.links.map((link) => (
+                    <li key={link.title}>
+                      <Link
+                        href={link.url}
+                        className="text-[15px] font-medium text-muted-foreground transition-colors duration-100 hover:text-foreground hover:underline hover:underline-offset-4"
+                      >
+                        {link.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
 
@@ -128,7 +150,7 @@ export function Footer() {
                 {status === "loading"
                   ? "…"
                   : status === "success"
-                    ? "Gesendet"
+                    ? "Gesendet ✓"
                     : "Eintragen"}
               </Button>
             </form>

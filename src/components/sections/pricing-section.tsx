@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Check } from "lucide-react"
 import { motion } from "motion/react"
 import posthog from "posthog-js"
@@ -105,28 +106,33 @@ export function PricingSection() {
                 ease: [0.21, 0.47, 0.32, 0.98],
               }}
             >
+              {tier.featured ? (
+                <div className="pointer-events-none absolute left-1/2 top-0 z-[60] -translate-x-1/2 -translate-y-1/2">
+                  <span className="bg-primary text-primary-foreground inline-block rounded-full px-3 py-1 text-[11px] font-bold tracking-wide shadow-md ring-2 ring-background">
+                    Most Popular
+                  </span>
+                </div>
+              ) : null}
               <MagicCard
                 className={cn("h-full rounded-2xl p-px bg-card")}
                 gradientColor={tier.featured ? "rgba(209,254,73,0.08)" : "rgba(255,255,255,0.04)"}
                 gradientFrom={tier.featured ? "#d1fe49" : "#ffffff"}
                 gradientTo={tier.featured ? "#9E7AFF" : "#888888"}
               >
-                <div className="relative flex h-full flex-col gap-6 rounded-2xl p-6">
-                  {tier.featured && (
-                    <>
-                      <BorderBeam
-                        colorFrom="#d1fe49"
-                        colorTo="#9E7AFF"
-                        duration={4}
-                        size={80}
-                      />
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <span className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-[11px] font-bold tracking-wide">
-                          Most Popular
-                        </span>
-                      </div>
-                    </>
+                <div
+                  className={cn(
+                    "relative flex h-full flex-col gap-6 rounded-2xl p-6",
+                    tier.featured && "pt-10"
                   )}
+                >
+                  {tier.featured ? (
+                    <BorderBeam
+                      colorFrom="#d1fe49"
+                      colorTo="#9E7AFF"
+                      duration={4}
+                      size={80}
+                    />
+                  ) : null}
 
                   <div className="flex flex-col gap-2">
                     <h3 className="text-foreground text-base font-semibold">{tier.name}</h3>
@@ -160,7 +166,17 @@ export function PricingSection() {
                         !tier.featured && "border-white/20 bg-white/5 text-foreground hover:bg-white/10"
                       )}
                     >
-                      <a href="#" onClick={() => posthog.capture("pricing_plan_cta_clicked", { plan: tier.name, featured: tier.featured })}>{tier.cta}</a>
+                      <Link
+                        href="/signup"
+                        onClick={() =>
+                          posthog.capture("pricing_plan_cta_clicked", {
+                            plan: tier.name,
+                            featured: tier.featured,
+                          })
+                        }
+                      >
+                        {tier.cta}
+                      </Link>
                     </Button>
                   </div>
                 </div>
