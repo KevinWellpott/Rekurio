@@ -62,9 +62,7 @@ export function StickyHeader() {
             animate={{
               boxShadow:
                 scrollY >= 120
-                  ? theme === "dark"
-                    ? "0 0 0 1px rgba(255,255,255,.08), 0 1px 2px -1px rgba(255,255,255,.08), 0 2px 4px rgba(255,255,255,.04)"
-                    : "0 0 0 1px rgba(17,24,28,.08), 0 1px 2px -1px rgba(17,24,28,.08), 0 2px 4px rgba(17,24,28,.04)"
+                  ? "inset 0 1px 0 rgba(255,255,255,0.70), inset 0 2px 10px rgba(209,254,73,0.07), inset 1px 0 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(0,0,0,0.22), 0 8px 32px rgba(0,0,0,0.20), 0 2px 8px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(209,254,73,0.14)"
                   : "none",
             }}
             transition={{
@@ -72,7 +70,15 @@ export function StickyHeader() {
               duration: 0.05,
               delay: 0.05,
             }}
-            className="bg-background flex h-12 w-auto items-center justify-center overflow-hidden rounded-full px-6 py-2.5 transition-all md:p-1.5 md:py-2"
+            className="flex h-12 w-auto items-center justify-center overflow-hidden rounded-full px-6 py-2.5 transition-all md:p-1.5 md:py-2"
+            style={{
+              background: scrollY >= 120
+                ? "linear-gradient(158deg, rgba(209,254,73,0.04) 0%, rgba(255,255,255,0.015) 50%, rgba(255,255,255,0.025) 100%)"
+                : "transparent",
+              backdropFilter: scrollY >= 120 ? "blur(44px) saturate(250%) brightness(1.02)" : "none",
+              WebkitBackdropFilter: scrollY >= 120 ? "blur(44px) saturate(250%) brightness(1.02)" : "none",
+              border: scrollY >= 120 ? "1px solid rgba(255,255,255,0.16)" : "1px solid transparent",
+            }}
           >
             <nav className="relative h-full items-center justify-between gap-x-3.5 md:flex">
               <ul className="flex h-full flex-col justify-center gap-6 md:flex-row md:justify-start md:gap-0 lg:gap-1">

@@ -110,7 +110,7 @@ export function CtaSection() {
               asChild
               variant="outline"
               size="lg"
-              className="group w-full border-white/25 bg-white/5 text-foreground hover:bg-white/10 sm:w-auto"
+              className="group w-full text-foreground sm:w-auto [background:linear-gradient(158deg,rgba(209,254,73,0.04)_0%,rgba(255,255,255,0.015)_50%,rgba(255,255,255,0.025)_100%)] [border:1px_solid_rgba(255,255,255,0.16)] [box-shadow:inset_0_1px_0_rgba(255,255,255,0.68),inset_0_2px_10px_rgba(209,254,73,0.07),inset_1px_0_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.22),0_4px_16px_rgba(0,0,0,0.18),0_0_0_0.5px_rgba(209,254,73,0.12)] [backdrop-filter:blur(44px)_saturate(250%)_brightness(1.02)] hover:[background:linear-gradient(158deg,rgba(209,254,73,0.06)_0%,rgba(255,255,255,0.025)_50%,rgba(255,255,255,0.04)_100%)]"
             >
               <a
                 href={calendlyUrl}

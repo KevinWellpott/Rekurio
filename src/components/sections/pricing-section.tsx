@@ -114,8 +114,8 @@ export function PricingSection() {
                 </div>
               ) : null}
               <MagicCard
-                className={cn("h-full rounded-2xl p-px bg-card")}
-                gradientColor={tier.featured ? "rgba(209,254,73,0.08)" : "rgba(255,255,255,0.04)"}
+                className={cn("h-full rounded-2xl p-px", tier.featured ? "glass-strong" : "glass")}
+                gradientColor={tier.featured ? "rgba(209,254,73,0.10)" : "rgba(255,255,255,0.05)"}
                 gradientFrom={tier.featured ? "#d1fe49" : "#ffffff"}
                 gradientTo={tier.featured ? "#9E7AFF" : "#888888"}
               >

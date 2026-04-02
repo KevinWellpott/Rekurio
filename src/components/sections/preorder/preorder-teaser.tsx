@@ -1,592 +1,556 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
-import {
-  Lock, BarChart3, Zap, Sparkles, GitBranch,
-  RefreshCcw, ShoppingCart, Users2, TrendingUp, Link2,
-  ArrowRight, ArrowUp, CheckCircle2,
-} from "lucide-react"
+import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "motion/react"
+import {
+  BarChart3, Zap, RefreshCcw, ShoppingCart,
+  Sparkles, GitBranch, Users2, TrendingUp, Link2, ArrowUp,
+  Check, Wifi,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
-import { EARLY_ACCESS_DISCOUNT_PERCENT } from "./preorder-offer"
 
-const CYCLE_MS = 4400
+// ── Liquid Glass helpers ──────────────────────────────────────────────────────
+const LQ_BG = "linear-gradient(158deg,rgba(209,254,73,0.035) 0%,rgba(255,255,255,0.015) 50%,rgba(255,255,255,0.025) 100%)"
+const LQ_FILTER = "blur(44px) saturate(250%) brightness(1.02)"
+const LQ_BORDER = "1px solid rgba(255,255,255,0.16)"
 
-// ─── Feature registry ────────────────────────────────────────────────────────
+function lqShadow(accentRgba: string, hovered: boolean) {
+  const spec = "inset 0 1.5px 0 rgba(255,255,255,0.80),inset 0 3px 12px rgba(209,254,73,0.08),inset 1.5px 0 0 rgba(255,255,255,0.18),inset 0 -1.5px 0 rgba(0,0,0,0.26)"
+  const depth = hovered
+    ? `0 20px 56px rgba(0,0,0,0.38),0 4px 14px rgba(0,0,0,0.22),0 0 0 0.5px ${accentRgba}0.32)`
+    : `0 8px 32px rgba(0,0,0,0.22),0 2px 8px rgba(0,0,0,0.12),0 0 0 0.5px ${accentRgba}0.16)`
+  return `${spec},${depth}`
+}
 
-const features = [
-  { id: "dashboard",   icon: BarChart3,   label: "Dashboard",          accent: "oklch(0.88 0.19 125)", locked: false },
-  { id: "nba",         icon: Zap,         label: "Next-Best-Action",   accent: "oklch(0.65 0.22 280)", locked: true  },
-  { id: "winback",     icon: RefreshCcw,  label: "Win-Back",           accent: "oklch(0.60 0.22 20)",  locked: false },
-  { id: "cart",        icon: ShoppingCart,label: "Abandoned Cart",     accent: "oklch(0.78 0.16 72)",  locked: false },
-  { id: "copy",        icon: Sparkles,    label: "KI-Copywriting",     accent: "oklch(0.68 0.18 220)", locked: true  },
-  { id: "flows",       icon: GitBranch,   label: "Flow-Templates",     accent: "oklch(0.70 0.18 155)", locked: false },
-  { id: "segment",     icon: Users2,      label: "Segmentierung",      accent: "oklch(0.60 0.20 260)", locked: true  },
-  { id: "roi",         icon: TrendingUp,  label: "ROI-Rechner",        accent: "oklch(0.68 0.15 195)", locked: false },
-  { id: "oauth",       icon: Link2,       label: "Klaviyo OAuth",      accent: "oklch(0.70 0.00 0)",   locked: false },
-] as const
+// ══════════════════════════════════════════════════════════════════════════════
+// Visuals
+// ══════════════════════════════════════════════════════════════════════════════
 
-type FeatureId = typeof features[number]["id"]
-
-// ─── Visual: Dashboard ───────────────────────────────────────────────────────
-
-const bars = [42, 58, 51, 74, 83, 100]
-const labels = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun"]
+// 1 – Dashboard
+const D_BARS = [38, 52, 47, 68, 79, 100]
+const D_LABELS = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun"]
+const D_REVENUES = [3840, 4120, 3960, 4480, 4760, 5380]
 
 function VisualDashboard() {
+  const [go, setGo] = useState(false)
+  const [tick, setTick] = useState(0)
+  useEffect(() => { const t = setTimeout(() => setGo(true), 200); return () => clearTimeout(t) }, [])
+  useEffect(() => { const id = setInterval(() => setTick(n => n + 1), 3000); return () => clearInterval(id) }, [])
+  const rev = D_REVENUES[tick % D_REVENUES.length]
   return (
-    <div className="flex h-full flex-col gap-4 p-6 sm:p-8">
+    <div className="flex h-full flex-col gap-3 p-5 pt-5">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-muted-foreground/60 text-xs uppercase tracking-widest">Monatlicher Revenue</p>
-          <p className="text-foreground text-4xl font-bold tabular-nums sm:text-5xl">€ 4.280</p>
+          <p className="mb-0.5 text-[9px] uppercase tracking-widest text-white/30">Email Revenue</p>
+          <AnimatePresence mode="wait">
+            <motion.p key={rev} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }} className="text-3xl font-bold tabular-nums text-foreground">
+              € {rev.toLocaleString("de-DE")}
+            </motion.p>
+          </AnimatePresence>
         </div>
-        <div className="flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1.5 ring-1 ring-primary/30">
-          <ArrowUp className="text-primary size-3.5" />
-          <span className="text-primary text-sm font-bold">+34 %</span>
-        </div>
+        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }} className="flex items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 ring-1 ring-primary/30">
+          <ArrowUp className="size-3 text-primary" />
+          <span className="text-xs font-bold text-primary">+34 %</span>
+        </motion.div>
       </div>
-      <div className="flex flex-1 items-end gap-2 sm:gap-3">
-        {bars.map((h, i) => (
-          <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
+      <div className="flex flex-1 items-end gap-1.5">
+        {D_BARS.map((h, i) => (
+          <div key={i} className="flex flex-1 flex-col items-center gap-1">
             <motion.div
-              className={cn("w-full rounded-t-sm", i === bars.length - 1 ? "bg-primary" : "bg-primary/25")}
-              initial={{ height: 0 }}
-              animate={{ height: `${h}%` }}
-              transition={{ duration: 0.5, delay: i * 0.06, ease: "easeOut" }}
-              style={{ minHeight: 4 }}
+              className="w-full rounded-t-sm"
+              style={{ background: i === D_BARS.length - 1 ? "oklch(0.92 0.19 125)" : "oklch(0.92 0.19 125 / 28%)", minHeight: 3 }}
+              initial={{ height: 0 }} animate={{ height: go ? `${h * 0.9}%` : 0 }}
+              transition={{ duration: 0.85, delay: 0.15 + i * 0.06, type: "spring", stiffness: 55, damping: 12 }}
             />
-            <span className="text-muted-foreground/35 text-[9px]">{labels[i]}</span>
+            <span className="text-[9px] text-white/25">{D_LABELS[i]}</span>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-3 gap-2">
-        {[
-          { label: "Revenue/Email", val: "+34 %", hi: true },
-          { label: "Öffnungsrate",  val: "42.1 %", hi: false },
-          { label: "Click-Rate",    val: "8.7 %",  hi: false },
-        ].map((k) => (
-          <div key={k.label} className="rounded-xl border border-white/8 bg-white/3 px-3 py-2.5">
-            <p className="text-muted-foreground/50 text-[9px] uppercase tracking-wide">{k.label}</p>
-            <p className={cn("text-sm font-bold tabular-nums mt-0.5", k.hi ? "text-primary" : "text-foreground/65")}>{k.val}</p>
-          </div>
+      <div className="grid grid-cols-3 gap-2 border-t border-white/8 pt-2.5">
+        {[{ l: "Open Rate", v: "48 %" }, { l: "CTR", v: "12 %" }, { l: "Unsub", v: "0.1 %" }].map(k => (
+          <div key={k.l}><span className="text-[9px] uppercase tracking-wide text-white/25">{k.l}</span><p className="text-sm font-semibold text-foreground">{k.v}</p></div>
         ))}
       </div>
     </div>
   )
 }
 
-// ─── Visual: Next-Best-Action ────────────────────────────────────────────────
-
-function VisualNBA() {
-  return (
-    <div className="flex h-full flex-col justify-center gap-6 p-6 sm:p-8">
-      <p className="text-muted-foreground/40 text-xs font-medium uppercase tracking-widest">Heute&apos;s Priorität</p>
-      <div className="rounded-2xl border border-violet-500/25 bg-violet-500/8 p-5 sm:p-6">
-        <p className="text-foreground/90 text-xl font-semibold leading-snug sm:text-2xl">
-          Win-Back Flow aktivieren
-        </p>
-        <p className="text-violet-300/70 mt-1 text-sm">Deine inaktiven Kunden der letzten 90 Tage</p>
-        <p className="text-violet-300 mt-4 text-4xl font-bold tabular-nums sm:text-5xl">
-          +€ 1.240<span className="text-violet-300/50 text-lg font-medium"> / Mo.</span>
-        </p>
-      </div>
-      <div className="flex flex-col gap-2">
-        {[
-          { label: "Post-Purchase Sequenz", val: "+€ 890 / Mo." },
-          { label: "VIP-Segment anlegen",   val: "+€ 620 / Mo." },
-        ].map((a) => (
-          <div key={a.label} className="flex items-center justify-between rounded-xl border border-white/6 bg-white/3 px-4 py-2.5">
-            <span className="text-foreground/50 text-sm">{a.label}</span>
-            <span className="text-foreground/35 text-sm font-semibold tabular-nums">{a.val}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// ─── Visual: Win-Back ────────────────────────────────────────────────────────
-
-function VisualWinBack() {
-  const total = 80
-  const sleeping = Math.round(total * 0.23)
-  return (
-    <div className="flex h-full flex-col justify-center gap-5 p-6 sm:p-8">
-      <div>
-        <p className="text-muted-foreground/40 text-xs uppercase tracking-widest">Deine Kundenbasis</p>
-        <p className="text-foreground text-3xl font-bold sm:text-4xl">
-          23 %<span className="text-foreground/40 text-xl font-medium"> schlafen gerade</span>
-        </p>
-      </div>
-      {/* Dot grid */}
-      <div className="flex flex-wrap gap-1.5">
-        {Array.from({ length: total }).map((_, i) => (
-          <motion.div
-            key={i}
-            className={cn(
-              "h-2.5 w-2.5 shrink-0 rounded-full",
-              i < sleeping ? "bg-rose-400/70" : "bg-white/20",
-            )}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.25, delay: i * 0.008 }}
-          />
-        ))}
-      </div>
-      <div className="flex items-center justify-between rounded-2xl border border-rose-500/20 bg-rose-500/8 px-5 py-4">
-        <div>
-          <p className="text-muted-foreground/60 text-xs">Win-Back Potenzial</p>
-          <p className="text-rose-300 text-2xl font-bold tabular-nums">+€ 840 / Mo.</p>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-          <span className="text-muted-foreground/50 text-xs">3 gerade reaktiviert</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Visual: Abandoned Cart ──────────────────────────────────────────────────
-
-function VisualCart() {
-  return (
-    <div className="flex h-full flex-col justify-center gap-6 p-6 sm:p-8">
-      <div className="flex items-center gap-6 sm:gap-10">
-        <div className="flex flex-col items-center gap-1">
-          <p className="text-foreground/30 text-5xl font-bold tabular-nums sm:text-6xl">68 %</p>
-          <p className="text-muted-foreground/40 text-xs">verlassene Carts</p>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <ArrowRight className="text-amber-400/60 size-6" />
-          <span className="text-muted-foreground/30 text-[9px]">Rekurio</span>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <motion.p
-            className="text-amber-300 text-5xl font-bold tabular-nums sm:text-6xl"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            8.7 %
-          </motion.p>
-          <p className="text-amber-400/60 text-xs">Recovery Rate</p>
-        </div>
-      </div>
-      <div className="h-px bg-white/6" />
-      <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-white/8 bg-white/3 px-4 py-3">
-          <p className="text-muted-foreground/50 text-[10px] uppercase tracking-wide">Vorher (∅)</p>
-          <p className="text-foreground/35 text-xl font-bold tabular-nums">€ 320 / Mo.</p>
-        </div>
-        <div className="rounded-xl border border-amber-500/25 bg-amber-500/8 px-4 py-3">
-          <p className="text-amber-400/60 text-[10px] uppercase tracking-wide">Mit Rekurio</p>
-          <p className="text-amber-300 text-xl font-bold tabular-nums">+€ 1.440 / Mo.</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Visual: KI-Copy ─────────────────────────────────────────────────────────
-
-const variants = [
-  { sub: "Du hast etwas vergessen… 👀", open: "48 %", best: false },
-  { sub: "Nur noch 3 in deiner Größe",  open: "52 %", best: false },
-  { sub: "Exklusiv für dich – heute",   open: "61 %", best: true  },
+// 2 – Win-Back
+const WB_STEPS = [
+  { icon: "👥", label: "Lapsed Segment", count: "843" },
+  { icon: "📧", label: "E-Mail versendet", count: "843" },
+  { icon: "👁", label: "Geöffnet", count: "412" },
+  { icon: "🖱", label: "Geklickt", count: "187" },
+  { icon: "✅", label: "Zurückgewonnen", count: "94" },
 ]
 
-function VisualCopy() {
-  const [cursor, setCursor] = useState(true)
-  const [active, setActive] = useState(2)
+function VisualWinBack() {
+  const [rev, setRev] = useState(0)
   useEffect(() => {
-    const t = setInterval(() => setCursor((c) => !c), 530)
-    return () => clearInterval(t)
-  }, [])
-  useEffect(() => {
-    const t = setInterval(() => setActive((p) => (p + 1) % variants.length), 2600)
-    return () => clearInterval(t)
-  }, [])
+    if (rev < WB_STEPS.length) { const t = setTimeout(() => setRev(r => r + 1), 500); return () => clearTimeout(t) }
+    const t = setTimeout(() => setRev(0), 2800); return () => clearTimeout(t)
+  }, [rev])
   return (
-    <div className="flex h-full flex-col gap-4 p-6 sm:p-8">
-      {/* Fake email chrome */}
-      <div className="rounded-xl border border-white/8 bg-black/30 overflow-hidden">
-        <div className="flex items-center gap-2 border-b border-white/6 px-3 py-2">
-          <div className="flex gap-1">
-            {[0,1,2].map(i => <div key={i} className="h-2 w-2 rounded-full bg-white/10" />)}
-          </div>
-          <span className="text-muted-foreground/40 text-[10px] mx-auto">Neues E-Mail – Rekurio KI</span>
+    <div className="flex h-full flex-col gap-1.5 p-5">
+      <p className="mb-1 text-[9px] uppercase tracking-widest text-white/30">Win-Back Flow</p>
+      <div className="mb-2 rounded-lg border border-rose-500/20 bg-rose-500/6 px-3 py-2">
+        <p className="text-[9px] text-white/30 uppercase tracking-wide">Ungenutztes Potenzial</p>
+        <p className="text-xl font-bold text-rose-400">+€ 840 / Mo.</p>
+      </div>
+      {WB_STEPS.map((s, i) => (
+        <AnimatePresence key={s.label}>
+          {i < rev && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} transition={{ duration: 0.25 }}
+              className="flex items-center gap-2 overflow-hidden rounded-lg border border-white/7 bg-white/[0.025] px-3 py-1.5">
+              <span className="text-sm">{s.icon}</span>
+              <span className="flex-1 text-xs text-foreground/75">{s.label}</span>
+              <span className="text-xs font-bold tabular-nums text-white/35">{s.count}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      ))}
+    </div>
+  )
+}
+
+// 3 – Next-Best-Action
+const NBA = [
+  { label: "Win-Back Flow aktivieren", score: 94 },
+  { label: "Cart-Reminder A/B-Test", score: 88 },
+  { label: "VIP-Segment bereinigen", score: 81 },
+  { label: "Betreffzeilen testen", score: 76 },
+  { label: "Welcome-Flow optimieren", score: 71 },
+]
+
+function VisualNBA() {
+  const [active, setActive] = useState(0)
+  useEffect(() => { const id = setInterval(() => setActive(i => (i + 1) % NBA.length), 1900); return () => clearInterval(id) }, [])
+  return (
+    <div className="flex h-full flex-col gap-2 p-5">
+      <p className="mb-1 text-[9px] uppercase tracking-widest text-white/30">Nächste Priorität</p>
+      {NBA.map((a, i) => (
+        <motion.div key={a.label} animate={{ opacity: i === active ? 1 : 0.3, x: i === active ? 3 : 0 }} transition={{ duration: 0.22 }}
+          className="flex items-center gap-2 rounded-lg border px-3 py-2"
+          style={{ background: i === active ? "rgba(209,254,73,0.06)" : "rgba(255,255,255,0.025)", borderColor: i === active ? "rgba(209,254,73,0.28)" : "rgba(255,255,255,0.06)" }}>
+          {i === active
+            ? <motion.div layoutId="nba-preorder-dot" className="size-1.5 shrink-0 rounded-full bg-primary" />
+            : <div className="size-1.5 shrink-0 rounded-full bg-white/20" />}
+          <span className="flex-1 text-xs text-foreground/80">{a.label}</span>
+          <span className="shrink-0 text-sm font-bold tabular-nums" style={{ color: i === active ? "oklch(0.92 0.19 125)" : "rgba(255,255,255,0.22)" }}>{a.score}</span>
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+// 4 – KI-Copywriting
+const SUBJECTS = [
+  "Hey {Name}, dein Warenkorb vermisst dich 🛒",
+  "Nur noch 3 Stück – jetzt zuschlagen?",
+  "{Vorname}, wir haben etwas für dich reserviert",
+  "Letzte Chance: 20 % nur heute für dich",
+  "Wir haben dich vermisst – komm zurück 💌",
+]
+
+function VisualCopywriting() {
+  const [idx, setIdx] = useState(0)
+  const [text, setText] = useState("")
+  const [cur, setCur] = useState(true)
+  const c = useRef(0)
+  useEffect(() => {
+    c.current = 0; setText(""); setCur(true)
+    const target = SUBJECTS[idx]
+    const id = setInterval(() => {
+      c.current++; setText(target.slice(0, c.current))
+      if (c.current >= target.length) { clearInterval(id); setCur(false); setTimeout(() => setIdx(i => (i + 1) % SUBJECTS.length), 2200) }
+    }, 30)
+    return () => clearInterval(id)
+  }, [idx])
+  return (
+    <div className="flex h-full flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-white/8 bg-white/[0.025]">
+        <div className="flex items-center gap-2 border-b border-white/8 px-4 py-2">
+          <span className="w-12 shrink-0 text-[9px] uppercase tracking-widest text-white/25">Von</span>
+          <span className="text-xs text-foreground/50">hello@yourshop.com</span>
         </div>
-        <div className="p-4 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-muted-foreground/40 w-14">An:</span>
-            <span className="text-foreground/60">Win-Back Segment · 1.240 Kontakte</span>
-          </div>
-          <div className="flex items-baseline gap-2 text-xs">
-            <span className="text-muted-foreground/40 w-14">Betreff:</span>
-            <span className="text-foreground/80 font-medium">{variants[active].sub}</span>
-            <span className={cn("w-px h-3.5 bg-foreground/70 inline-block", cursor ? "opacity-100" : "opacity-0")} />
-          </div>
+        <div className="flex min-h-[2.5rem] items-start gap-2 border-b border-white/8 px-4 py-2.5">
+          <span className="w-12 shrink-0 text-[9px] uppercase tracking-widest text-white/25 pt-0.5">Betreff</span>
+          <span className="text-xs text-foreground leading-snug">
+            {text}
+            {cur && <motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity }} className="ml-0.5 inline-block h-3 w-0.5 align-middle bg-primary" />}
+          </span>
+        </div>
+        <div className="flex flex-1 flex-col gap-2 p-4">
+          {[80, 65, 72, 45].map((w, i) => (
+            <motion.div key={i} className="h-1.5 rounded-full bg-white/6" style={{ width: `${w}%` }}
+              animate={{ opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2.8, delay: i * 0.3, repeat: Infinity }} />
+          ))}
         </div>
       </div>
-      {/* Variant comparison */}
+      <div className="flex items-center gap-1.5 self-start rounded-full bg-sky-500/10 px-3 py-1.5 ring-1 ring-sky-500/20">
+        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}>
+          <Sparkles className="size-3 text-sky-400" />
+        </motion.div>
+        <span className="text-[10px] font-medium text-sky-400">KI-Vorschlag generiert</span>
+      </div>
+    </div>
+  )
+}
+
+// 5 – Abandoned Cart
+const CART_ITEMS = ["Linen Shirt (M)", "Canvas Sneaker", "Wool Sweater"]
+const CART_TIMES = ["sofort", "nach 1h", "nach 24h"]
+
+function VisualCart() {
+  const [step, setStep] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setStep(s => (s + 1) % CART_TIMES.length), 1800)
+    return () => clearInterval(id)
+  }, [])
+  return (
+    <div className="flex h-full flex-col gap-3 p-5">
+      <p className="text-[9px] uppercase tracking-widest text-white/30">Abandoned Cart Recovery</p>
       <div className="flex flex-col gap-1.5">
-        <p className="text-muted-foreground/40 text-[10px] uppercase tracking-widest">KI-Varianten</p>
-        {variants.map((v, i) => (
-          <motion.div
-            key={v.sub}
-            className={cn(
-              "relative flex items-center justify-between gap-3 rounded-lg border px-3 py-2 text-[11px]",
-              i === active ? "border-sky-500/30 bg-sky-500/8" : "border-white/5 bg-white/2",
-            )}
-          >
-            <span className={cn("truncate", i === active ? "text-foreground/85" : "text-foreground/35")}>{v.sub}</span>
-            <div className="flex shrink-0 items-center gap-2">
-              <span className={cn("font-bold tabular-nums", i === active ? "text-sky-300" : "text-muted-foreground/25")}>{v.open}</span>
-              {v.best && <span className="rounded-full bg-sky-500/20 px-1.5 py-0.5 text-[8px] font-bold text-sky-300 border border-sky-500/25">BEST</span>}
-            </div>
+        {CART_ITEMS.map((item, i) => (
+          <motion.div key={item} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}
+            className="flex items-center gap-2 rounded-lg border border-white/7 bg-white/[0.025] px-3 py-2">
+            <ShoppingCart className="size-3 shrink-0 text-amber-400/60" />
+            <span className="flex-1 text-xs text-foreground/70">{item}</span>
           </motion.div>
         ))}
       </div>
+      <div className="mt-auto flex items-center gap-2">
+        {CART_TIMES.map((t, i) => (
+          <motion.div key={t} animate={{ opacity: i === step ? 1 : 0.35, scale: i === step ? 1.05 : 1 }} transition={{ duration: 0.22 }}
+            className="flex-1 rounded-lg border px-2 py-1.5 text-center"
+            style={{ borderColor: i === step ? "rgba(251,191,36,0.35)" : "rgba(255,255,255,0.06)", background: i === step ? "rgba(251,191,36,0.08)" : "rgba(255,255,255,0.02)" }}>
+            <span className="block text-[9px] uppercase tracking-wide text-white/30">E-Mail</span>
+            <span className="text-[10px] font-semibold" style={{ color: i === step ? "rgba(251,191,36,1)" : "rgba(255,255,255,0.4)" }}>{t}</span>
+          </motion.div>
+        ))}
+      </div>
+      <div className="rounded-lg border border-amber-400/20 bg-amber-400/6 px-3 py-2">
+        <span className="text-[9px] uppercase tracking-wide text-white/30">Recovery Revenue</span>
+        <p className="text-lg font-bold text-amber-400">+€ 890 / Mo.</p>
+      </div>
     </div>
   )
 }
 
-// ─── Visual: Flow-Templates ──────────────────────────────────────────────────
-
-const flowNodes = [
-  { icon: ShoppingCart, label: "Trigger",  sub: "Kaufabbruch",   color: "text-amber-400",   bg: "bg-amber-500/15" },
-  { icon: Zap,          label: "Mail 1",   sub: "+€ 420 / Mo.",  color: "text-sky-400",     bg: "bg-sky-500/15"   },
-  { icon: RefreshCcw,   label: "3 Tage",   sub: "Wartezeit",     color: "text-white/30",    bg: "bg-white/5"      },
-  { icon: Sparkles,     label: "Mail 2",   sub: "+€ 680 / Mo.",  color: "text-violet-400",  bg: "bg-violet-500/15"},
-  { icon: TrendingUp,   label: "Revenue",  sub: "+€ 1.100 / Mo.", color: "text-primary",    bg: "bg-primary/15"   },
+// 6 – Flow-Templates
+const FL = [
+  { label: "Welcome Series", revenue: "+€ 1.240", active: true },
+  { label: "Abandoned Cart", revenue: "+€ 890", active: true },
+  { label: "Win-Back", revenue: "+€ 530", active: true },
+  { label: "VIP Upgrade", revenue: "+€ 320", active: false },
 ]
 
 function VisualFlows() {
+  const [flash, setFlash] = useState<number | null>(null)
+  useEffect(() => {
+    const cycle = () => { const i = Math.floor(Math.random() * FL.length); setFlash(i); setTimeout(() => setFlash(null), 500) }
+    const id = setInterval(cycle, 1400)
+    return () => clearInterval(id)
+  }, [])
   return (
-    <div className="flex h-full flex-col justify-center gap-6 p-6 sm:p-8">
-      <div>
-        <p className="text-muted-foreground/40 text-xs uppercase tracking-widest">Beispiel: Cart-Abandonment Flow</p>
-        <p className="text-foreground/70 text-sm mt-0.5">73 vorgefertigte Flows – aktivierbar in Minuten</p>
-      </div>
-      <div className="flex items-center justify-between overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-        {flowNodes.map((node, i) => {
-          const Icon = node.icon
-          return (
-            <div key={node.label} className="flex shrink-0 items-center gap-2">
-              <motion.div
-                className="flex flex-col items-center gap-1.5"
-                initial={{ opacity: 0, scale: 0.75 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.35, delay: 0.05 + i * 0.1 }}
-              >
-                <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl border border-white/8", node.bg)}>
-                  <Icon className={cn("size-5", node.color)} />
-                </div>
-                <p className="text-foreground/70 text-[10px] font-medium">{node.label}</p>
-                <p className={cn("text-[9px] font-semibold tabular-nums", node.color)}>{node.sub}</p>
-              </motion.div>
-              {i < flowNodes.length - 1 && (
-                <motion.div
-                  className="flex shrink-0 items-center gap-0.5"
-                  initial={{ opacity: 0, scaleX: 0 }}
-                  animate={{ opacity: 1, scaleX: 1 }}
-                  style={{ originX: 0 }}
-                  transition={{ duration: 0.25, delay: 0.2 + i * 0.1 }}
-                >
-                  <div className="h-px w-6 bg-white/15" />
-                  <ArrowRight className="text-white/15 size-3 -ml-1.5" />
-                </motion.div>
-              )}
-            </div>
-          )
-        })}
-      </div>
-      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/8 px-5 py-3 flex items-center justify-between">
-        <p className="text-emerald-400/70 text-sm">Gesamter Flow-Umsatz</p>
-        <p className="text-emerald-300 text-2xl font-bold tabular-nums">+€ 2.100 / Mo.</p>
-      </div>
+    <div className="flex h-full flex-col gap-2 p-5">
+      <p className="mb-1 text-[9px] uppercase tracking-widest text-white/30">Aktive Flows</p>
+      {FL.map((f, i) => (
+        <motion.div key={f.label} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
+          className="flex items-center gap-2 rounded-lg border px-3 py-2.5"
+          style={{ background: flash === i ? "rgba(52,211,153,0.08)" : "rgba(255,255,255,0.025)", borderColor: flash === i ? "rgba(52,211,153,0.25)" : "rgba(255,255,255,0.07)", transition: "all 0.3s" }}>
+          <motion.div className="size-1.5 shrink-0 rounded-full"
+            style={{ background: f.active ? "oklch(0.92 0.19 125)" : "rgba(255,255,255,0.2)" }}
+            animate={f.active ? { opacity: [1, 0.35, 1], scale: [1, 1.4, 1] } : {}}
+            transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.35 }} />
+          <span className="flex-1 text-xs text-foreground/75">{f.label}</span>
+          <span className="text-[10px] font-semibold text-primary/80">{f.revenue}</span>
+        </motion.div>
+      ))}
     </div>
   )
 }
 
-// ─── Visual: Segmentierung ───────────────────────────────────────────────────
+// 7 – Segmentierung
+const SEGS = [
+  { label: "Champions", count: "284", pct: 100, color: "rgba(209,254,73," },
+  { label: "Aktive Käufer", count: "1.240", pct: 80, color: "rgba(56,189,248," },
+  { label: "At Risk", count: "613", pct: 52, color: "rgba(251,191,36," },
+  { label: "Lapsed", count: "843", pct: 35, color: "rgba(251,113,133," },
+]
 
 function VisualSegment() {
-  const segs = [
-    { name: "VIP",       pct: 15, rev: "€ 124/Kunde", color: "bg-indigo-500",   textColor: "text-indigo-300" },
-    { name: "Aktiv",     pct: 45, rev: "€ 38/Kunde",  color: "bg-indigo-500/35",textColor: "text-foreground/50" },
-    { name: "Inaktiv",   pct: 40, rev: "€ 2/Kunde",   color: "bg-white/8",      textColor: "text-foreground/25" },
-  ]
+  const [go, setGo] = useState(false)
+  useEffect(() => { const t = setTimeout(() => setGo(true), 300); return () => clearTimeout(t) }, [])
   return (
-    <div className="flex h-full flex-col justify-center gap-5 p-6 sm:p-8">
-      <div>
-        <p className="text-muted-foreground/40 text-xs uppercase tracking-widest">Deine Kundensegmente</p>
-        <p className="text-foreground text-3xl font-bold sm:text-4xl">
-          4×<span className="text-foreground/40 text-xl font-medium"> mehr Revenue mit VIP-Segment</span>
-        </p>
-      </div>
-      <div className="flex gap-2 items-end" style={{ height: 100 }}>
-        {segs.map((s, i) => (
-          <motion.div
-            key={s.name}
-            className={cn("flex flex-col justify-end items-center rounded-xl overflow-hidden", s.color)}
-            style={{ flex: s.pct }}
-            initial={{ height: 0 }}
-            animate={{ height: "100%" }}
-            transition={{ duration: 0.55, delay: i * 0.1, ease: "easeOut" }}
-          >
-            <div className="p-2 text-center">
-              <p className={cn("text-[10px] font-bold", s.textColor)}>{s.name}</p>
-              <p className={cn("text-[9px] tabular-nums", s.textColor)}>{s.rev}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-      <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/8 px-5 py-3 flex items-center justify-between">
-        <p className="text-indigo-400/70 text-sm">VIP-Reaktivierung Potenzial</p>
-        <p className="text-indigo-300 text-2xl font-bold tabular-nums">+€ 1.860 / Mo.</p>
-      </div>
+    <div className="flex h-full flex-col gap-3 p-5">
+      <p className="mb-0.5 text-[9px] uppercase tracking-widest text-white/30">Segmente</p>
+      {SEGS.map((s, i) => (
+        <div key={s.label} className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-foreground/70">{s.label}</span>
+            <span className="text-xs font-semibold tabular-nums text-white/40">{s.count}</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-white/8">
+            <motion.div className="h-full rounded-full"
+              style={{ background: `linear-gradient(to right,${s.color}0.9),${s.color}0.5))` }}
+              initial={{ width: "0%" }} animate={{ width: go ? `${s.pct}%` : "0%" }}
+              transition={{ duration: 1.0, delay: 0.1 + i * 0.1, type: "spring", stiffness: 50, damping: 14 }} />
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
 
-// ─── Visual: ROI ─────────────────────────────────────────────────────────────
+// 8 – ROI-Rechner
+const ROI_VALS = [1240, 1890, 2350, 3120, 4480, 5820]
 
 function VisualROI() {
+  const [idx, setIdx] = useState(0)
+  const [go, setGo] = useState(false)
+  useEffect(() => { const t = setTimeout(() => setGo(true), 400); return () => clearTimeout(t) }, [])
+  useEffect(() => { const id = setInterval(() => setIdx(i => (i + 1) % ROI_VALS.length), 2200); return () => clearInterval(id) }, [])
+  const val = ROI_VALS[idx]
   return (
-    <div className="flex h-full flex-col justify-center gap-5 p-6 sm:p-8">
-      <p className="text-muted-foreground/40 text-xs uppercase tracking-widest">Dein Klaviyo-Potenzial</p>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-        <div className="flex-1 rounded-2xl border border-white/8 bg-white/3 p-5">
-          <p className="text-muted-foreground/50 text-xs uppercase tracking-wide">Aktueller Revenue</p>
-          <p className="text-foreground/60 mt-1 text-4xl font-bold tabular-nums">€ 200k</p>
-          <p className="text-muted-foreground/30 text-xs mt-1">Jahresumsatz</p>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <ArrowRight className="text-teal-400/50 size-8 hidden sm:block" />
-          <ArrowRight className="text-teal-400/50 size-6 rotate-90 sm:hidden" />
-          <p className="text-muted-foreground/30 text-[9px]">Rekurio</p>
-        </div>
-        <div className="flex-1 rounded-2xl border border-teal-500/30 bg-teal-500/8 p-5">
-          <p className="text-teal-400/60 text-xs uppercase tracking-wide">Neues Potenzial</p>
-          <motion.p
-            className="text-teal-300 mt-1 text-4xl font-bold tabular-nums"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            +€ 28k
-          </motion.p>
-          <p className="text-teal-400/50 text-xs mt-1">/ Jahr</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Visual: OAuth ───────────────────────────────────────────────────────────
-
-function VisualOAuth() {
-  const steps = [
-    { n: 1, label: "Klaviyo API-Key eingeben", done: true  },
-    { n: 2, label: "Account wird analysiert",  done: true  },
-    { n: 3, label: "Revenue-Insights live",    done: false },
-  ]
-  return (
-    <div className="flex h-full flex-col justify-center gap-5 p-6 sm:p-8">
-      <div>
-        <p className="text-muted-foreground/40 text-xs uppercase tracking-widest">Setup</p>
-        <p className="text-foreground text-3xl font-bold sm:text-4xl">
-          &lt;&nbsp;2 Min<span className="text-foreground/40 text-xl font-medium"> bis zur ersten Analyse</span>
-        </p>
-      </div>
-      <div className="flex flex-col gap-3">
-        {steps.map((step, i) => (
-          <motion.div
-            key={step.n}
-            className={cn(
-              "flex items-center gap-4 rounded-xl border px-5 py-4",
-              step.done
-                ? "border-primary/25 bg-primary/8"
-                : "border-white/8 bg-white/3",
-            )}
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
-          >
-            {step.done
-              ? <CheckCircle2 className="text-primary size-5 shrink-0" />
-              : <div className="h-5 w-5 shrink-0 rounded-full border border-white/20 flex items-center justify-center"><span className="text-muted-foreground/40 text-[10px] font-bold">{step.n}</span></div>
-            }
-            <span className={cn("text-sm font-medium", step.done ? "text-foreground/80" : "text-muted-foreground/40")}>
-              {step.label}
-            </span>
-            {!step.done && (
-              <span className="ml-auto rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] text-muted-foreground/40">
-                ausstehend
-              </span>
-            )}
-          </motion.div>
+    <div className="flex h-full flex-col gap-3 p-5">
+      <p className="text-[9px] uppercase tracking-widest text-white/30">Ungenutztes Revenue</p>
+      <AnimatePresence mode="wait">
+        <motion.p key={val} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.35 }}
+          className="text-4xl font-bold tabular-nums text-foreground">
+          +€ {val.toLocaleString("de-DE")}
+        </motion.p>
+      </AnimatePresence>
+      <p className="text-xs text-muted-foreground">pro Monat – basierend auf deinem Jahresumsatz</p>
+      <div className="mt-auto flex flex-col gap-1.5">
+        {[40, 65, 80, 100].map((w, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/8">
+              <motion.div className="h-full rounded-full bg-primary/70"
+                initial={{ width: "0%" }} animate={{ width: go ? `${w}%` : "0%" }}
+                transition={{ duration: 0.9, delay: 0.15 + i * 0.12, type: "spring", stiffness: 55 }} />
+            </div>
+            <span className="w-10 text-right text-[9px] text-white/30">{w} %</span>
+          </div>
         ))}
       </div>
     </div>
   )
 }
 
-// ─── Spotlight router ─────────────────────────────────────────────────────────
+// 9 – Klaviyo OAuth
+function VisualOAuth() {
+  const [connected, setConnected] = useState(false)
+  const [pulse, setPulse] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => { setConnected(true); setTimeout(() => setPulse(true), 400) }, 1200)
+    return () => clearTimeout(t)
+  }, [])
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-5 p-5">
+      <div className="flex items-center gap-4">
+        {/* Rekurio */}
+        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
+          <span className="text-lg font-bold text-primary">R</span>
+        </motion.div>
 
-function FeatureVisual({ id }: { id: FeatureId }) {
-  switch (id) {
-    case "dashboard": return <VisualDashboard />
-    case "nba":       return <VisualNBA />
-    case "winback":   return <VisualWinBack />
-    case "cart":      return <VisualCart />
-    case "copy":      return <VisualCopy />
-    case "flows":     return <VisualFlows />
-    case "segment":   return <VisualSegment />
-    case "roi":       return <VisualROI />
-    case "oauth":     return <VisualOAuth />
-  }
+        {/* Beam */}
+        <div className="relative flex h-2 w-20 items-center">
+          <div className="absolute inset-0 rounded-full bg-white/8" />
+          <AnimatePresence>
+            {connected && (
+              <motion.div initial={{ scaleX: 0, originX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}
+                className="absolute inset-0 rounded-full bg-primary/70" />
+            )}
+          </AnimatePresence>
+          {connected && (
+            <motion.div
+              className="absolute left-0 h-2 w-2 rounded-full bg-primary shadow-[0_0_8px_2px_rgba(209,254,73,0.6)]"
+              animate={{ x: [0, 76, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.8 }}
+            />
+          )}
+        </div>
+
+        {/* Klaviyo */}
+        <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/5">
+          <span className="text-lg font-bold text-foreground/70">K</span>
+        </motion.div>
+      </div>
+
+      <AnimatePresence>
+        {pulse && (
+          <motion.div initial={{ opacity: 0, y: 6, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.3 }}
+            className="flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-4 py-2">
+            <motion.div animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
+              <Check className="size-3.5 text-primary" />
+            </motion.div>
+            <span className="text-xs font-medium text-primary">Klaviyo verbunden</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <p className="text-center text-xs leading-snug text-muted-foreground max-w-[14rem]">
+        1-Klick OAuth — kein API-Key, kein IT-Ticket.
+      </p>
+    </div>
+  )
 }
 
-// ─── Section ─────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// Card registry
+// ══════════════════════════════════════════════════════════════════════════════
+
+interface CardDef {
+  id: string
+  icon: React.ElementType
+  title: string
+  desc: string
+  Visual: React.FC
+  col: string
+  accent: string   // rgba prefix
+  accentFull: string
+}
+
+const CARDS: CardDef[] = [
+  {
+    id: "dashboard", icon: BarChart3,
+    title: "Performance-Dashboard",
+    desc: "Revenue, Open Rates und Deliverability auf einen Blick — live aus Klaviyo.",
+    Visual: VisualDashboard, col: "col-span-3 lg:col-span-2",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.92 0.19 125)",
+  },
+  {
+    id: "winback", icon: RefreshCcw,
+    title: "Win-Back Automation",
+    desc: "Inaktive Kunden reaktivieren — zur richtigen Zeit, mit dem richtigen Angebot.",
+    Visual: VisualWinBack, col: "col-span-3 lg:col-span-1",
+    accent: "rgba(251,113,133,", accentFull: "oklch(0.60 0.22 20)",
+  },
+  {
+    id: "nba", icon: Zap,
+    title: "Next-Best-Action Engine",
+    desc: "Die eine Maßnahme pro Tag, die deinen Umsatz am meisten bewegt.",
+    Visual: VisualNBA, col: "col-span-3 lg:col-span-1",
+    accent: "rgba(139,92,246,", accentFull: "oklch(0.65 0.22 280)",
+  },
+  {
+    id: "copy", icon: Sparkles,
+    title: "KI-Copywriting",
+    desc: "Personalisierte Betreffzeilen und Flows, die konvertieren — in Sekunden.",
+    Visual: VisualCopywriting, col: "col-span-3 lg:col-span-2",
+    accent: "rgba(56,189,248,", accentFull: "oklch(0.68 0.18 220)",
+  },
+  {
+    id: "cart", icon: ShoppingCart,
+    title: "Abandoned Cart Recovery",
+    desc: "Automatisierte Sequenz: sofort, 1h, 24h — jedes verlorene Item eine zweite Chance.",
+    Visual: VisualCart, col: "col-span-3 lg:col-span-1",
+    accent: "rgba(251,191,36,", accentFull: "oklch(0.78 0.16 72)",
+  },
+  {
+    id: "flows", icon: GitBranch,
+    title: "Flow-Templates",
+    desc: "Welcome, Cart, Win-Back — Best-Practice-Flows, direkt in Klaviyo einsatzbereit.",
+    Visual: VisualFlows, col: "col-span-3 lg:col-span-1",
+    accent: "rgba(52,211,153,", accentFull: "oklch(0.70 0.18 155)",
+  },
+  {
+    id: "segment", icon: Users2,
+    title: "Segmentierung",
+    desc: "Champions, Aktive, At-Risk — automatisch klassifiziert und stets aktuell.",
+    Visual: VisualSegment, col: "col-span-3 lg:col-span-1",
+    accent: "rgba(99,102,241,", accentFull: "oklch(0.60 0.20 260)",
+  },
+  {
+    id: "roi", icon: TrendingUp,
+    title: "ROI-Rechner",
+    desc: "Sieh sofort, wie viel Revenue du monatlich liegen lässt.",
+    Visual: VisualROI, col: "col-span-3 lg:col-span-2",
+    accent: "rgba(209,254,73,", accentFull: "oklch(0.88 0.16 195)",
+  },
+  {
+    id: "oauth", icon: Link2,
+    title: "Klaviyo OAuth Connect",
+    desc: "Kein API-Key, kein IT-Ticket. Verbunden in 60 Sekunden.",
+    Visual: VisualOAuth, col: "col-span-3 lg:col-span-1",
+    accent: "rgba(255,255,255,", accentFull: "rgba(255,255,255,0.7)",
+  },
+]
+
+// ══════════════════════════════════════════════════════════════════════════════
+// BentoCard
+// ══════════════════════════════════════════════════════════════════════════════
+
+function BentoCard({ card }: { card: CardDef }) {
+  const [hovered, setHovered] = useState(false)
+  const Icon = card.icon
+  const { Visual } = card
+  return (
+    <motion.div
+      className={cn("group relative flex flex-col overflow-hidden rounded-2xl", card.col)}
+      style={{ background: LQ_BG, border: LQ_BORDER, backdropFilter: LQ_FILTER, WebkitBackdropFilter: LQ_FILTER, boxShadow: lqShadow(card.accent, hovered) }}
+      animate={{ y: hovered ? -4 : 0 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="relative min-h-[11rem] flex-1 overflow-hidden">
+        <Visual />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
+      </div>
+
+      <div className="relative border-t border-white/8 p-5">
+        <motion.div animate={{ opacity: hovered ? 1 : 0 }} transition={{ duration: 0.3 }}
+          className="pointer-events-none absolute inset-0 rounded-b-2xl"
+          style={{ background: `radial-gradient(ellipse 70% 120% at 15% 110%,${card.accent}0.10),transparent 70%)` }} />
+        <motion.div animate={{ color: hovered ? card.accentFull : "rgba(255,255,255,0.35)" }} transition={{ duration: 0.22 }}>
+          <Icon className="mb-3 size-5" />
+        </motion.div>
+        <h3 className="mb-1.5 text-sm font-semibold tracking-tight text-foreground/90 transition-colors duration-200 group-hover:text-foreground">{card.title}</h3>
+        <p className="text-xs leading-relaxed text-muted-foreground">{card.desc}</p>
+      </div>
+    </motion.div>
+  )
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// Section export
+// ══════════════════════════════════════════════════════════════════════════════
+
+const viewportOnce = { once: true as const, amount: 0.08 }
 
 export function PreorderTeaser() {
-  const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
-
-  useEffect(() => {
-    if (paused) return
-    const t = setInterval(() => setActive((p) => (p + 1) % features.length), CYCLE_MS)
-    return () => clearInterval(t)
-  }, [paused])
-
-  const handleSelect = useCallback((i: number) => {
-    setActive(i)
-    setPaused(true)
-    setTimeout(() => setPaused(false), 10000)
-  }, [])
-
-  const feat = features[active]
-
   return (
-    <section id="preorder-teaser" className="section-spacing">
+    <section className="section-spacing">
       <div className="container">
-        {/* Header */}
         <motion.div
-          className="mb-10 flex max-w-2xl flex-col items-start gap-3"
+          className="mb-10 flex max-w-3xl flex-col items-start gap-4"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.6, type: "spring", ease: [0.21, 0.47, 0.32, 0.98] }}
         >
-          <h2 className="from-foreground to-foreground/60 bg-linear-to-br from-30% bg-clip-text text-3xl font-semibold tracking-tighter text-balance text-transparent sm:text-4xl">
-            Dein Klaviyo-Revenue – maximiert, automatisch.
+          <h2 className="from-foreground to-foreground/60 bg-linear-to-br from-30% bg-clip-text text-left text-3xl font-semibold tracking-tighter text-balance text-transparent sm:text-4xl">
+            Was dich als Early-Access Nutzer erwartet.
           </h2>
-          <p className="text-muted-foreground max-w-lg text-base text-balance">
-            Erster Monat gratis, danach dauerhaft{" "}
-            {EARLY_ACCESS_DISCOUNT_PERCENT}&nbsp;% günstiger als der Listenpreis.
+          <p className="text-muted-foreground max-w-xl text-left text-base text-balance">
+            Alle Features. Automatisch. Du startest einen Monat früher — und zahlst diesen Monat nicht.
           </p>
         </motion.div>
 
-        {/* ── Feature spotlight ── */}
         <motion.div
-          className="relative overflow-hidden rounded-3xl border transition-colors duration-500"
-          style={{
-            borderColor: `color-mix(in oklch, ${feat.accent} 30%, transparent)`,
-            background: `linear-gradient(160deg, oklch(0.10 0.02 260), oklch(0.13 0.03 260))`,
-          }}
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="grid w-full auto-rows-[20rem] grid-cols-3 gap-4 md:auto-rows-[22rem]"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {/* Ambient glow per feature */}
-          <div
-            className="pointer-events-none absolute inset-0 transition-all duration-700"
-            style={{
-              background: `radial-gradient(ellipse 60% 50% at 80% 30%, color-mix(in oklch, ${feat.accent} 8%, transparent), transparent)`,
-            }}
-          />
-
-          {/* Feature header bar */}
-          <div className="relative flex items-center justify-between border-b border-white/8 px-6 py-4">
-            <div className="flex items-center gap-3">
-              <div
-                className="flex h-8 w-8 items-center justify-center rounded-xl transition-colors duration-500"
-                style={{ background: `color-mix(in oklch, ${feat.accent} 18%, transparent)` }}
-              >
-                <feat.icon
-                  className="size-4 transition-colors duration-500"
-                  style={{ color: feat.accent }}
-                />
-              </div>
-              <span className="text-foreground font-semibold transition-colors duration-500">
-                {feat.label}
-              </span>
-            </div>
-            {feat.locked && (
-              <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/60">
-                <Lock className="size-3" />
-                Early Access
-              </span>
-            )}
-          </div>
-
-          {/* Animated visual */}
-          <div className="relative" style={{ minHeight: 360 }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                className="absolute inset-0"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-              >
-                <FeatureVisual id={feat.id} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Progress bar */}
-          <motion.div
-            key={`pb-${active}`}
-            className="h-0.5 transition-colors duration-500"
-            style={{ background: `color-mix(in oklch, ${feat.accent} 55%, transparent)`, transformOrigin: "left" }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: paused ? 0 : CYCLE_MS / 1000, ease: "linear" }}
-          />
-        </motion.div>
-
-        {/* Feature pill navigation */}
-        <motion.div
-          className="mt-4 flex flex-wrap justify-center gap-2"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-        >
-          {features.map((f, i) => {
-            const isActive = i === active
-            return (
-              <button
-                key={f.id}
-                onClick={() => handleSelect(i)}
-                className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-200"
-                style={isActive
-                  ? { background: `color-mix(in oklch, ${f.accent} 15%, transparent)`, borderColor: `color-mix(in oklch, ${f.accent} 40%, transparent)`, color: f.accent }
-                  : { background: "oklch(1 0 0 / 0.04)", borderColor: "oklch(1 0 0 / 0.08)", color: "oklch(0.65 0 0)" }
-                }
-              >
-                <f.icon className="size-3" />
-                {f.label}
-              </button>
-            )
-          })}
+          {CARDS.map(card => (
+            <BentoCard key={card.id} card={card} />
+          ))}
         </motion.div>
       </div>
     </section>

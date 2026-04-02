@@ -72,7 +72,14 @@ export function Footer() {
   }
 
   return (
-    <footer className="border-t border-white/10 bg-transparent px-7 py-10 backdrop-blur-2xl supports-[backdrop-filter]:bg-black/10 md:px-10">
+    <footer className="border-t border-white/15 px-7 py-10 md:px-10"
+      style={{
+        background: "linear-gradient(158deg, rgba(209,254,73,0.03) 0%, rgba(255,255,255,0.012) 50%, rgba(255,255,255,0.022) 100%)",
+        backdropFilter: "blur(44px) saturate(250%) brightness(1.02)",
+        WebkitBackdropFilter: "blur(44px) saturate(250%) brightness(1.02)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.50)",
+      }}
+    >
       <div className="container">
         <div className="mx-auto flex max-w-6xl flex-col gap-x-8 gap-y-10 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex w-full flex-col items-start gap-y-4 lg:max-w-sm">

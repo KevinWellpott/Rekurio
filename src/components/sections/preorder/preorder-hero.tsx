@@ -115,11 +115,22 @@ function BadgeItem({ badge }: { badge: Badge }) {
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors duration-200 cursor-default",
+        "flex shrink-0 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium cursor-default transition-all duration-300",
         badge.highlighted
-          ? "border-primary/40 bg-primary/10 text-primary"
-          : "border-white/8 bg-white/4 text-foreground/65 hover:border-white/15"
+          ? "border border-primary/40 bg-primary/10 text-primary"
+          : "text-foreground/70"
       )}
+      style={badge.highlighted ? undefined : {
+        background: hovered
+          ? "linear-gradient(158deg, rgba(209,254,73,0.055) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.03) 100%)"
+          : "linear-gradient(158deg, rgba(209,254,73,0.03) 0%, rgba(255,255,255,0.012) 50%, rgba(255,255,255,0.022) 100%)",
+        border: "1px solid rgba(255,255,255,0.16)",
+        backdropFilter: "blur(44px) saturate(250%) brightness(1.02)",
+        WebkitBackdropFilter: "blur(44px) saturate(250%) brightness(1.02)",
+        boxShadow: hovered
+          ? `inset 0 1px 0 rgba(255,255,255,0.72), inset 0 2px 10px rgba(209,254,73,0.08), inset 1px 0 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(0,0,0,0.22), 0 6px 24px rgba(0,0,0,0.20), 0 0 16px 3px ${badge.glowColor}`
+          : "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 2px 8px rgba(209,254,73,0.05), inset 1px 0 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.18), 0 4px 14px rgba(0,0,0,0.16)",
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -129,7 +140,7 @@ function BadgeItem({ badge }: { badge: Badge }) {
           badge.highlighted ? "bg-primary" : badge.iconBg
         )}
         style={
-          hovered
+          hovered && !badge.highlighted
             ? { boxShadow: `0 0 14px 3px ${badge.glowColor}` }
             : undefined
         }
@@ -298,7 +309,7 @@ export function PreorderHero() {
 
           {/* Offer Block – 3-Spalten-Glas */}
           <motion.div
-            className="glass w-full max-w-md overflow-hidden rounded-2xl divide-x divide-white/8"
+            className="glass-strong w-full max-w-md overflow-hidden rounded-2xl divide-x divide-white/10"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
@@ -326,7 +337,7 @@ export function PreorderHero() {
             viewport={viewportOnce}
             transition={{ duration: 0.6, delay: 0.28, type: "spring", ease: [0.21, 0.47, 0.32, 0.98] }}
           >
-            <div className="glass rounded-2xl p-4 sm:p-5">
+            <div className="glass-strong rounded-2xl p-4 sm:p-5">
               <WaitlistForm />
               <p className="text-muted-foreground mt-3 text-center text-xs">
                 Keine Kreditkarte &middot; DSGVO-konform &middot; Jederzeit abmeldbar
