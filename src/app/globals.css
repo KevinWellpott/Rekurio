@@ -234,9 +234,21 @@
 
   --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
   --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+  --animate-shiny-text: shiny-text 7s infinite;
   @keyframes shimmer-slide {
     to {
       transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes shiny-text {
+    0%,
+    90%,
+    100% {
+      background-position: calc(-100% - var(--shiny-width)) 0;
+    }
+    30%,
+    60% {
+      background-position: calc(100% + var(--shiny-width)) 0;
     }
   }
   @keyframes spin-around {
@@ -280,7 +292,7 @@
 
   /* --- Layout (Marketing) — fluid = konsistent auf allen Viewports --- */
   /* Demo: 4× Basis — zurück: alle drei clamp-Zeilen halbieren (2×) bzw. auf Ausgang */
-  --section-spacing-y: clamp(4rem, 14vw, 7rem);
+  --section-spacing-y: clamp(2.5rem, 9vw, 4.5rem);
   --container-padding: clamp(1rem, 4vw, 1.5rem);
   --container-max-width: 1200px;
 
@@ -334,7 +346,7 @@
   --secondary: oklch(0.22 0.02 260);
   --secondary-foreground: oklch(0.88 0.17 125);
   --muted: oklch(0.22 0.02 260);
-  --muted-foreground: oklch(0.65 0.02 260);
+  --muted-foreground: oklch(0.72 0.02 260);
   --accent: oklch(0.24 0.03 260);
   --accent-foreground: oklch(0.88 0.17 125);
   --destructive: oklch(0.704 0.191 22.216);
@@ -363,14 +375,14 @@
 
 @media (min-width: 48rem) {
   :root {
-    --section-spacing-y: clamp(5rem, 12vw, 8rem);
+    --section-spacing-y: clamp(3.5rem, 8vw, 5.5rem);
     --container-padding: 1.25rem;
   }
 }
 
 @media (min-width: 64rem) {
   :root {
-    --section-spacing-y: clamp(6rem, 10vw, 9rem);
+    --section-spacing-y: clamp(4rem, 7vw, 6rem);
     --container-padding: 1.5rem;
   }
 }
@@ -479,6 +491,15 @@
   /** Dünne Linie unter einer Section (volle Viewport-Breite des Blocks) */
   .section-divider-b {
     border-bottom: 1px solid var(--section-divider);
+  }
+
+  /**
+   * Subtiles Dot-Grid als Hintergrund-Textur (post-hero Sections).
+   * Über ein <div class="bg-dot-pattern pointer-events-none absolute inset-0" /> legen.
+   */
+  .bg-dot-pattern {
+    background-image: radial-gradient(oklch(1 0 0 / 0.055) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 
   .container {

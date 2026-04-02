@@ -8,32 +8,21 @@ import { HomeBentoSection } from "@/components/sections/home-bento-section";
 import { TestimonialsSection } from "@/components/sections/testimonials-section";
 import { PricingSection } from "@/components/sections/pricing-section";
 import { CtaSection } from "@/components/sections/cta-section";
+import { siteConfig } from "@/lib/config";
+import { getHomePageJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
   title: "Klaviyo-Assistent für DTC-Brands – Rekurio",
   description:
     "Mehr Revenue aus Klaviyo – ohne Agentur. Rekurio gibt DTC-Brands ein Dashboard, Flow-Templates und KI-Copywriting. 14 Tage kostenlos testen.",
-};
-
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Rekurio",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  description:
-    "Klaviyo-Assistent für DTC-Brands: Dashboard, Flows, KI-Copywriting und Next-Best-Actions.",
-  offers: {
-    "@type": "AggregateOffer",
-    lowPrice: "89",
-    highPrice: "349",
-    priceCurrency: "EUR",
-    offerCount: "3",
+  alternates: {
+    canonical: siteConfig.url,
   },
-  url: "https://www.rekurio.com",
 };
 
 export default function Home() {
+  const structuredData = getHomePageJsonLd();
+
   return (
     <>
       <script

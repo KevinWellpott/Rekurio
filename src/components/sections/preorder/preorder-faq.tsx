@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import { cn } from "@/lib/utils"
+import { earlyAccessOfferShort } from "./preorder-offer"
 
 const viewportOnce = { once: true as const, amount: 0.15 }
 
@@ -11,27 +12,35 @@ const faqs = [
   {
     question: "Kostet mich das Eintragen etwas?",
     answer:
-      "Nein, komplett kostenlos. Kein Abo, keine Kreditkarte, keine versteckten Kosten. Du trägst dich ein, wir informieren dich vor dem Launch.",
+      "Nein, komplett kostenlos. Kein Abo, keine Kreditkarte, keine versteckten Kosten. Du tr\u00e4gst dich ein, wir halten dich zum Start von Early Access auf dem Laufenden.",
   },
   {
     question: "Was passiert nach der Anmeldung?",
     answer:
-      "Du bekommst sofort eine Bestätigungsmail. Nach der Bestätigung erhältst du 4 kurze Mails mit Einblicken in das Produkt. Beim Launch bist du als Erstes drin – mit Frühbucherpreis.",
+      "Du bekommst sofort eine Best\u00e4tigungsmail. Nach der Best\u00e4tigung erh\u00e4ltst du ein paar kurze Mails mit Einblicken ins Produkt. Sobald Early Access startet, greifen f\u00fcr dich die festen Vorteile: " +
+      earlyAccessOfferShort,
   },
   {
     question: "Was ist der Unterschied zwischen Rekurio und Klaviyo?",
     answer:
-      "Klaviyo ist dein E-Mail-Marketing-Tool – das Werkzeug. Rekurio ist der Co-Pilot der dir sagt, was du damit tun sollst: Welcher Flow fehlt, welches Segment ungenutzt bleibt, welche Kampagne als nächstes den meisten Umsatz bringt.",
+      "Klaviyo ist dein E-Mail-Marketing-Tool \u2013 das Werkzeug. Rekurio ist der Co-Pilot, der dir sagt, was du damit tun sollst: Welcher Flow fehlt, welches Segment ungenutzt bleibt, welche Kampagne als n\u00e4chstes den meisten Umsatz bringt.",
   },
   {
-    question: "Wann startet Rekurio?",
+    question: "Wann startet Rekurio \u2013 und was hei\u00dft \u201eein Monat fr\u00fcher\u201c?",
     answer:
-      "Wir planen den Launch für Q2 2026. Early-Access-Mitglieder werden als Erstes informiert und ongeboardet – vor allen anderen.",
+      "\u00d6ffentlicher Launch ist f\u00fcr Q2 2026 geplant. Early-Access-Nutzer bekommen Zugang, sobald das Produkt f\u00fcr euch stabil genug ist \u2013 in der Regel bis zu einem Monat vor dem \u00f6ffentlichen Go-live. Der erste Monat in Early Access ist kostenlos; danach zahlst du dauerhaft 10\u00a0% weniger als der sp\u00e4tere Listenpreis, solange du Kunde bleibst.",
   },
   {
-    question: "Was ist der Frühbucherpreis genau?",
+    question: "Was genau ist das Early-Access-Angebot?",
     answer:
-      "Als Early-Access-Mitglied zahlst du dauerhaft 20 % weniger als der reguläre Listenpreis. Dieser Rabatt bleibt – solange du dabei bleibst. Wer nach dem offiziellen Launch einsteigt, zahlt den vollen Preis.",
+      "Es ist f\u00fcr alle Early-Access-Nutzer gleich: " +
+      earlyAccessOfferShort +
+      " Wer erst nach dem \u00f6ffentlichen Launch einsteigt, zahlt den regul\u00e4ren Listenpreis ohne diesen Rabatt.",
+  },
+  {
+    question: "Was wenn ich nach dem kostenlosen Monat unzufrieden bin?",
+    answer:
+      "Dann kannst du einfach nicht weitermachen \u2013 kein Abo l\u00e4uft automatisch an, keine Rechnung. Du entscheidest nach dem ersten Monat selbst, ob Rekurio f\u00fcr dich passt. Kein Risiko, keine versteckte Bindung.",
   },
   {
     question: "Was passiert mit meiner E-Mail-Adresse?",
@@ -69,9 +78,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
             transition={{ duration: 0.22, ease: [0.32, 0, 0.67, 0] }}
             className="overflow-hidden"
           >
-            <p className="text-muted-foreground pb-4 text-sm leading-relaxed">
-              {answer}
-            </p>
+            <p className="text-muted-foreground pb-4 text-sm leading-relaxed">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -81,21 +88,17 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 export function PreorderFaq() {
   return (
-    <section className="section-spacing section-divider-b">
+    <section className="section-spacing">
       <div className="container">
         <motion.div
-          className="mx-auto max-w-2xl"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 0.6, delay: 0.05, type: "spring", ease: [0.21, 0.47, 0.32, 0.98] }}
         >
           <div className="mb-8 flex flex-col gap-2">
-            <span className="bg-primary/15 text-primary ring-primary/30 inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase ring-1">
-              FAQ
-            </span>
             <h2 className="from-foreground to-foreground/60 bg-linear-to-br from-30% bg-clip-text text-2xl font-semibold tracking-tighter text-transparent sm:text-3xl">
-              Häufige Fragen
+              H\u00e4ufige Fragen
             </h2>
           </div>
 
