@@ -62,7 +62,7 @@ export function PreorderActivityToast({ className }: { className?: string }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="glass border-border/60 shadow-lg rounded-xl border px-3.5 py-2.5"
+            className="glass-strong rounded-xl px-3.5 py-2.5"
           >
             <p className="text-foreground text-sm leading-snug">
               <span className="font-medium">{entry.name}</span>

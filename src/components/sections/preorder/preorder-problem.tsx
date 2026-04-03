@@ -47,10 +47,9 @@ const painPoints = [
   },
 ]
 
-const SECTION_HEIGHT = `calc(100svh + ${painPoints.length * 32}vh)`
+const SECTION_HEIGHT = `calc(100svh + ${painPoints.length * 10}vh)`
 
-const CARD_GLOW =
-  "0 0 60px -8px oklch(0.45 0.22 20 / 0.35), 0 0 120px -30px oklch(0.45 0.22 20 / 0.18), inset 0 0 40px -20px oklch(0.45 0.22 20 / 0.06)"
+const CARD_GLOW = "none"
 
 // ─── Mobile-only vertical slider ───────────────────────────────────────────
 
@@ -74,7 +73,7 @@ function MobileSlider() {
 
         {/* Progress dots */}
         <div className="mb-5 flex items-center gap-3">
-          <span className="text-rose-400/80 font-mono text-sm tabular-nums">
+          <span className="font-mono text-sm tabular-nums text-rose-400/80">
             {painPoints[activeIndex].number}
           </span>
           <span className="text-muted-foreground/25 font-mono text-sm">/</span>
@@ -100,7 +99,7 @@ function MobileSlider() {
 
         {/* Card */}
         <div
-          className="glass relative overflow-hidden rounded-2xl border border-rose-500/15 p-6"
+          className="glass relative overflow-hidden rounded-2xl border border-primary/15 p-6"
           style={{ boxShadow: CARD_GLOW }}
         >
           <AnimatePresence mode="wait">
@@ -117,17 +116,17 @@ function MobileSlider() {
                 className="select-none font-bold tabular-nums leading-none tracking-tighter"
                 style={{
                   fontSize: "clamp(4.5rem, 22vw, 7rem)",
-                  color: "oklch(0.58 0.2 20 / 0.55)",
-                  lineHeight: 1,
-                }}
-              >
-                {painPoints[activeIndex].number}
-              </span>
-              <h3 className="text-foreground text-lg font-semibold leading-snug tracking-tight">
-                {painPoints[activeIndex].title}
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {painPoints[activeIndex].body}
+                      color: "oklch(0.58 0.2 20 / 0.55)",
+                      lineHeight: 1,
+                    }}
+                  >
+                    {painPoints[activeIndex].number}
+                  </span>
+                  <h3 className="text-foreground text-lg font-semibold leading-snug tracking-tight">
+                    {painPoints[activeIndex].title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {painPoints[activeIndex].body}
               </p>
             </motion.div>
           </AnimatePresence>
@@ -200,7 +199,7 @@ function DesktopSlider() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 80% 60% at 30% 60%, oklch(0.45 0.22 20 / 0.06), transparent)",
+              "none",
           }}
         />
 
@@ -231,7 +230,7 @@ function DesktopSlider() {
                   onClick={() => handleClick(i)}
                   className={cn(
                     "group flex items-start gap-3 border-l-2 py-2.5 pl-4 text-left transition-all duration-200",
-                    i === activeIndex ? "border-rose-400/70" : "border-white/8 hover:border-white/20",
+                    i === activeIndex ? "border-rose-500/60" : "border-white/8 hover:border-white/20",
                   )}
                 >
                   <span
@@ -260,7 +259,7 @@ function DesktopSlider() {
 
             {/* Right: detail card */}
             <div
-              className="glass relative flex min-h-[280px] items-start overflow-hidden rounded-2xl border border-rose-500/15 p-6 lg:p-8"
+              className="glass relative flex min-h-[280px] items-start overflow-hidden rounded-2xl border border-primary/15 p-6 lg:p-8"
               style={{ boxShadow: CARD_GLOW }}
             >
               <AnimatePresence mode="wait">

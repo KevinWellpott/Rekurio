@@ -267,7 +267,13 @@
       transform: translateZ(0) rotate(360deg);
     }
   }
-}
+  --animate-blink-cursor: blink-cursor 1.2s step-end infinite
+;
+  @keyframes blink-cursor {
+  0%, 49% {
+    opacity: 1;}
+  50%, 100% {
+    opacity: 0;}}}
 
 /* :root — Design-Tokens (Details siehe Dokumentationsblock am Dateianfang) */
 
@@ -314,39 +320,82 @@
   /* --- Radius --- */
   --radius: 0.625rem;
 
-  /* --- Flächen / Effekte (Glass – eine feste Optik überall) --- */
-  --surface-glass-border: oklch(1 0 0 / 10%);
-  --surface-glass-bg: oklch(1 0 0 / 6%);
-  --surface-glass-bg-strong: oklch(1 0 0 / 10%);
-  /** Einheitlicher Blur für alle .glass / .glass-inner / .glass-strong */
-  --surface-glass-blur: 16px;
+  /* -----------------------------------------------------------------------
+   * Liquid Glass – Design System (Apple iOS 26 Style)
+   *
+   * Prinzip: Fast unsichtbares BG (2–4%), sehr starker Blur + Saturierung
+   * damit der Hintergrund lebendig durchscheint, harter weißer Specular-
+   * Highlight an der Oberkante, ganz leichter Brand-Hauch im Glanz.
+   * ----------------------------------------------------------------------- */
+
+  /* BG: fast transparent – Hintergrund soll DURCH das Glas sichtbar sein */
+  --lq-bg: linear-gradient(
+    158deg,
+    oklch(1 0 0 / 3%) 0%,
+    oklch(1 0 0 / 1.5%) 50%,
+    oklch(1 0 0 / 2.5%) 100%
+  );
+  /* Strong: prominente Elemente */
+  --lq-bg-strong: linear-gradient(
+    158deg,
+    oklch(1 0 0 / 5%) 0%,
+    oklch(1 0 0 / 2.5%) 45%,
+    oklch(1 0 0 / 4%) 100%
+  );
+  /* Blur hoch → macht Hintergrund weich, nicht milchig-weiß */
+  --lq-blur: 44px;
+  /* Saturate sehr hoch → Farben hinter dem Glas leuchten durch */
+  --lq-saturate: 250%;
+  /* Brightness minimal – NICHT hell machen, sonst wirkt es milchig */
+  --lq-brightness: 1.02;
+  /* Rand: subtil, durch Shadow-Stack überstrahlt */
+  --lq-border: oklch(1 0 0 / 16%);
+
+  /* ── Shadow-Stack ────────────────────────────────────────────────────── */
+  --lq-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 68%),
+    inset 1px 0 0 oklch(1 0 0 / 16%),
+    inset 0 -1px 0 oklch(0 0 0 / 24%),
+    0 8px 32px oklch(0 0 0 / 22%),
+    0 2px 8px oklch(0 0 0 / 12%);
+
+  /* Strong – schärferer Specular, deutlichere Tiefe */
+  --lq-shadow-strong:
+    inset 0 1.5px 0 oklch(1 0 0 / 80%),
+    inset 1.5px 0 0 oklch(1 0 0 / 20%),
+    inset 0 -1.5px 0 oklch(0 0 0 / 28%),
+    0 12px 40px oklch(0 0 0 / 28%),
+    0 4px 12px oklch(0 0 0 / 16%);
+
+  /* Legacy-Aliase (noch von body::after genutzt) */
+  --surface-glass-border: oklch(1 0 0 / 16%);
+  --surface-glass-bg: oklch(1 0 0 / 2.5%);
+  --surface-glass-bg-strong: oklch(1 0 0 / 4%);
+  --surface-glass-blur: 44px;
+
   /** Trennlinie zwischen Marketing-Sections (volle Breite) */
   --section-divider: oklch(1 0 0 / 12%);
 
-  /* --- Seiten-Hintergrund: Bild + Abdunkelung (liegt hinter Glass-Sektionen) --- */
-  --page-bg-image: url("/site-background.png");
-  --page-bg-overlay: oklch(0.08 0.02 260 / 0.55);
-
-  /* --- Vollpage-Glass (eine Ebene über dem Hintergrundbild, keine Sektions-Ränder) --- */
-  --page-glass-tint: oklch(0.12 0.02 160 / 0.18);
-  --page-glass-blur: 12px;
+  /* --- Vollpage-Glass (Ebene über dem CSS-Hintergrund) --- */
+  --page-glass-tint: oklch(0.12 0.02 160 / 0.08);
+  --page-glass-blur: 0px;
 
   /* --- Marken- & UI-Farben (shadcn / Theme) --- */
   --brand: #d1fe49;
   --brand-foreground: oklch(0.16 0.02 125);
 
-  --background: oklch(0.12 0.01 260);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.18 0.02 260);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.16 0.02 260 / 0.92);
-  --popover-foreground: oklch(0.985 0 0);
+  --background: oklch(0.10 0.01 260);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.16 0.02 260);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.14 0.02 260 / 0.94);
+  --popover-foreground: oklch(1 0 0);
   --primary: var(--brand);
   --primary-foreground: var(--brand-foreground);
-  --secondary: oklch(0.22 0.02 260);
-  --secondary-foreground: oklch(0.88 0.17 125);
-  --muted: oklch(0.22 0.02 260);
-  --muted-foreground: oklch(0.72 0.02 260);
+  --secondary: oklch(0.20 0.02 260);
+  --secondary-foreground: oklch(0.92 0.17 125);
+  --muted: oklch(0.20 0.02 260);
+  --muted-foreground: oklch(0.88 0.015 260);
   --accent: oklch(0.24 0.03 260);
   --accent-foreground: oklch(0.88 0.17 125);
   --destructive: oklch(0.704 0.191 22.216);
@@ -387,6 +436,7 @@
   }
 }
 
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -408,23 +458,21 @@
     background-color: var(--background);
   }
 
-  /* Ebene 0: Vollflächiges Bild + Overlay (eigenes Layer unter dem Blur) */
+  /* Ebene 0: Hintergrundbild – sehr wenig Opacity, stark geblurrt */
   body::before {
     content: "";
     position: fixed;
-    inset: 0;
+    inset: -5%;
     z-index: 0;
     pointer-events: none;
-    background-image:
-      linear-gradient(var(--page-bg-overlay), var(--page-bg-overlay)),
-      var(--page-bg-image);
-    background-size: cover, cover;
-    background-position: center, center;
-    background-repeat: no-repeat;
-    /* fixed entfernt: Layer ist schon position:fixed, Anhang „fixed“ triggert oft Backdrop-Bugs */
+    background-image: url("/site-background.png");
+    background-size: cover;
+    background-position: center top;
+    opacity: 0.30;
+    filter: blur(12px);
   }
 
-  /* Ebene 1: Tönung + Blur über der Bildebene */
+  /* Ebene 1: Subtile Tönung */
   body::after {
     content: "";
     position: fixed;
@@ -432,13 +480,10 @@
     z-index: 1;
     pointer-events: none;
     background: var(--page-glass-tint);
-    backdrop-filter: blur(var(--page-glass-blur));
-    -webkit-backdrop-filter: blur(var(--page-glass-blur));
-    transform: translateZ(0);
-    backface-visibility: hidden;
   }
 
-  /* App-Inhalt über der Glass-Ebene */
+
+    /* App-Inhalt über der Glass-Ebene */
   body > * {
     position: relative;
     z-index: 2;
@@ -447,45 +492,41 @@
 
 @layer utilities {
   /**
-   * Glasmorph – immer gleiche Werte (Rand, Fill, Blur).
-   * Keine zusätzlichen ring-* / andere blur-* auf Karten legen.
+   * Liquid Glass – Basiskarte.
+   * Gradient-Hintergrund + Specular-Top-Highlight + Tiefenschatten.
+   * Ersetzt klassisches Glassmorphism vollständig.
    */
   .glass {
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--surface-glass-border);
-    background-color: var(--surface-glass-bg);
-    box-shadow: none;
-    backdrop-filter: blur(var(--surface-glass-blur));
-    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+    border: 1px solid var(--lq-border);
+    background: var(--lq-bg);
+    box-shadow: var(--lq-shadow);
+    backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate)) brightness(var(--lq-brightness));
+    -webkit-backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate)) brightness(var(--lq-brightness));
   }
 
-  /** Nur Fill + Blur (z. B. innerhalb Magic Card, ohne zweiten Rand) */
+  /** Nur Fill + Blur (z. B. innerhalb Magic Card, kein eigener Rand) */
   .glass-inner {
-    background-color: var(--surface-glass-bg);
-    backdrop-filter: blur(var(--surface-glass-blur));
-    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+    background: var(--lq-bg);
+    backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate));
+    -webkit-backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate));
   }
 
+  /** Starke Variante: Pricing Cards, Hero-Blöcke, prominente Panels */
   .glass-strong {
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--surface-glass-border);
-    background-color: var(--surface-glass-bg-strong);
-    box-shadow: none;
-    backdrop-filter: blur(var(--surface-glass-blur));
-    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+    border: 1px solid oklch(1 0 0 / 22%);
+    background: var(--lq-bg-strong);
+    box-shadow: var(--lq-shadow-strong);
+    backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate)) brightness(var(--lq-brightness));
+    -webkit-backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate)) brightness(var(--lq-brightness));
   }
 
-  /** @deprecated Name – identisch zu .glass (Legacy-Komponenten) */
+  /** Legacy-Alias: identisch zu .glass */
   .glass-subtle {
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--surface-glass-border);
-    background-color: var(--surface-glass-bg);
-    box-shadow: none;
-    backdrop-filter: blur(var(--surface-glass-blur));
-    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+    border: 1px solid var(--lq-border);
+    background: var(--lq-bg);
+    box-shadow: var(--lq-shadow);
+    backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate)) brightness(var(--lq-brightness));
+    -webkit-backdrop-filter: blur(var(--lq-blur)) saturate(var(--lq-saturate)) brightness(var(--lq-brightness));
   }
 
   /** Dünne Linie unter einer Section (volle Viewport-Breite des Blocks) */
@@ -498,9 +539,10 @@
    * Über ein <div class="bg-dot-pattern pointer-events-none absolute inset-0" /> legen.
    */
   .bg-dot-pattern {
-    background-image: radial-gradient(oklch(1 0 0 / 0.055) 1px, transparent 1px);
+    background-image: radial-gradient(oklch(1 0 0 / 0.018) 1px, transparent 1px);
     background-size: 28px 28px;
   }
+
 
   .container {
     width: 100%;

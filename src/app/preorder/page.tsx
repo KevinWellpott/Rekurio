@@ -30,8 +30,11 @@ export default function PreorderPage() {
       {/* All post-hero sections share a subtle dot-pattern background layer */}
       <div className="relative">
         <div aria-hidden className="bg-dot-pattern pointer-events-none absolute inset-0" />
-        <PreorderProblem />
-        <PreorderHowItWorks />
+        {/* Problem + Lösung als visuell zusammengehörendes Paar */}
+        <div>
+          <PreorderProblem />
+          <PreorderHowItWorks />
+        </div>
         <PreorderTeaser />
         <PreorderBenefits />
         <PreorderFaq />

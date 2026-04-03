@@ -83,7 +83,7 @@ export function BlogLeadCapture({ placement, className }: BlogLeadCaptureProps) 
   return (
     <div
       className={cn(
-        "glass rounded-2xl border border-white/10 p-6 md:p-8",
+        "glass-strong rounded-2xl p-6 md:p-8",
         className
       )}
     >

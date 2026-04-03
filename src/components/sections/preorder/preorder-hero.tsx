@@ -115,11 +115,15 @@ function BadgeItem({ badge }: { badge: Badge }) {
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors duration-200 cursor-default",
+        "flex shrink-0 items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium cursor-default transition-all duration-300",
         badge.highlighted
-          ? "border-primary/40 bg-primary/10 text-primary"
-          : "border-white/8 bg-white/4 text-foreground/65 hover:border-white/15"
+          ? "border border-primary/40 bg-primary/10 text-primary"
+          : "text-foreground/70"
       )}
+      style={badge.highlighted ? undefined : {
+        background: hovered ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.10)",
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -128,11 +132,7 @@ function BadgeItem({ badge }: { badge: Badge }) {
           "flex h-6 w-6 shrink-0 items-center justify-center rounded-md transition-all duration-300",
           badge.highlighted ? "bg-primary" : badge.iconBg
         )}
-        style={
-          hovered
-            ? { boxShadow: `0 0 14px 3px ${badge.glowColor}` }
-            : undefined
-        }
+        style={undefined}
       >
         <Icon
           className={cn(
@@ -275,7 +275,7 @@ export function PreorderHero() {
           {/* Headline */}
           <div className="flex flex-col gap-5">
             <motion.h1
-              className="from-foreground to-foreground/50 bg-linear-to-br from-25% bg-clip-text text-[2.6rem] leading-[1.07] font-semibold tracking-[-0.04em] text-balance text-transparent sm:text-5xl md:text-[3.5rem]"
+              className="from-foreground to-foreground/50 bg-linear-to-br from-25% bg-clip-text text-[1.9rem] leading-[1.08] font-semibold tracking-[-0.035em] text-balance text-transparent sm:text-[2.6rem] sm:leading-[1.07] sm:tracking-[-0.04em] md:text-5xl lg:text-[3.5rem]"
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
@@ -285,7 +285,7 @@ export function PreorderHero() {
             </motion.h1>
 
             <motion.p
-              className="text-muted-foreground mx-auto max-w-lg text-lg leading-relaxed tracking-tight text-balance"
+              className="text-muted-foreground mx-auto max-w-lg text-base leading-relaxed tracking-tight text-balance sm:text-lg"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
@@ -298,7 +298,7 @@ export function PreorderHero() {
 
           {/* Offer Block – 3-Spalten-Glas */}
           <motion.div
-            className="glass w-full max-w-md overflow-hidden rounded-2xl divide-x divide-white/8"
+            className="glass-strong w-full max-w-md overflow-hidden rounded-2xl divide-x divide-white/10"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
@@ -306,11 +306,11 @@ export function PreorderHero() {
           >
             <div className="grid grid-cols-3">
               {offerItems.map((item) => (
-                <div key={item.label} className="flex flex-col items-center gap-0.5 px-3 py-3.5">
-                  <span className="text-primary text-lg font-bold tracking-tight leading-none">
+                <div key={item.label} className="flex flex-col items-center gap-0.5 px-2 py-3 sm:px-3 sm:py-3.5">
+                  <span className="text-primary text-base font-bold tracking-tight leading-none sm:text-lg">
                     {item.value}
                   </span>
-                  <span className="text-muted-foreground text-[10px] leading-tight text-center">
+                  <span className="text-muted-foreground text-[9px] leading-tight text-center sm:text-[10px]">
                     {item.label}
                   </span>
                 </div>
@@ -326,7 +326,7 @@ export function PreorderHero() {
             viewport={viewportOnce}
             transition={{ duration: 0.6, delay: 0.28, type: "spring", ease: [0.21, 0.47, 0.32, 0.98] }}
           >
-            <div className="glass rounded-2xl p-4 sm:p-5">
+            <div className="glass-strong rounded-2xl p-4 sm:p-5">
               <WaitlistForm />
               <p className="text-muted-foreground mt-3 text-center text-xs">
                 Keine Kreditkarte &middot; DSGVO-konform &middot; Jederzeit abmeldbar
